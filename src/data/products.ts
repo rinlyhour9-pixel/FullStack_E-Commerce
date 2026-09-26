@@ -1,9 +1,5 @@
 import type { Product } from "../types/product";
-import { makeArtKey } from "../utils/imageKey";
 
-function gallery(shape: Parameters<typeof makeArtKey>[0], tint: Parameters<typeof makeArtKey>[1]) {
-  return [0, 1, 2, 3].map((variant) => makeArtKey(shape, tint, variant));
-}
 
 export const baseProducts: Product[] = [
   {
@@ -23,7 +19,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["combination", "oily", "all"],
     price: 28,
     currency: "USD",
-    images: gallery("tube", "clay"),
+    images: [`/images/products/velvet-clay-cleanser.jpg`],
     variants: [
       { id: "v-100ml", label: "100ml", priceModifier: 0, stock: 64 },
       { id: "v-200ml", label: "200ml", priceModifier: 12, stock: 21 },
@@ -68,7 +64,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["oily", "combination"],
     price: 24,
     currency: "USD",
-    images: gallery("pump", "sage"),
+    images: [`/images/products/marine-mist-gel-cleanser.jpg`],
     variants: [
       { id: "v-150ml", label: "150ml", priceModifier: 0, stock: 5 },
     ],
@@ -104,7 +100,7 @@ export const baseProducts: Product[] = [
     price: 52,
     compareAtPrice: 62,
     currency: "USD",
-    images: gallery("dropper", "gold"),
+    images: [`/images/products/bakuchiol-renewal-serum.jpg`],
     variants: [
       { id: "v-30ml", label: "30ml", priceModifier: 0, stock: 40 },
       { id: "v-50ml", label: "50ml", priceModifier: 18, stock: 15 },
@@ -146,7 +142,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all"],
     price: 58,
     currency: "USD",
-    images: gallery("dropper", "clay"),
+    images: [`/images/products/vitamin-c-brightening-serum.jpg`],
     variants: [{ id: "v-30ml", label: "30ml", priceModifier: 0, stock: 27 }],
     rating: 4.5,
     reviewCount: 176,
@@ -176,7 +172,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all", "sensitive"],
     price: 46,
     currency: "USD",
-    images: gallery("dropper", "forest"),
+    images: [`/images/products/hyaluronic-depth-serum.jpg`],
     variants: [{ id: "v-30ml", label: "30ml", priceModifier: 0, stock: 33 }],
     rating: 4.7,
     reviewCount: 289,
@@ -205,7 +201,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "sensitive"],
     price: 44,
     currency: "USD",
-    images: gallery("jar", "forest"),
+    images: [`/images/products/barrier-repair-cream.jpg`],
     variants: [
       { id: "v-50ml", label: "50ml", priceModifier: 0, stock: 50 },
       { id: "v-100ml", label: "100ml", priceModifier: 20, stock: 18 },
@@ -247,7 +243,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["combination", "oily"],
     price: 38,
     currency: "USD",
-    images: gallery("jar", "sage"),
+    images: [`/images/products/whipped-sage-moisturizer.jpg`],
     variants: [{ id: "v-50ml", label: "50ml", priceModifier: 0, stock: 6 }],
     rating: 4.5,
     reviewCount: 152,
@@ -276,7 +272,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all"],
     price: 64,
     currency: "USD",
-    images: gallery("pump", "ink"),
+    images: [`/images/products/overnight-recovery-balm.jpg`],
     variants: [{ id: "v-50ml", label: "50ml", priceModifier: 0, stock: 22 }],
     rating: 4.7,
     reviewCount: 133,
@@ -306,7 +302,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["oily", "combination"],
     price: 34,
     currency: "USD",
-    images: gallery("tube", "clay"),
+    images: [`/images/products/kaolin-detox-mask.jpg`],
     variants: [{ id: "v-75ml", label: "75ml", priceModifier: 0, stock: 3 }],
     rating: 4.3,
     reviewCount: 87,
@@ -335,7 +331,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["sensitive", "dry"],
     price: 36,
     currency: "USD",
-    images: gallery("jar", "sage"),
+    images: [`/images/products/calm-oat-sleeping-mask.jpg`],
     variants: [{ id: "v-75ml", label: "75ml", priceModifier: 0, stock: 28 }],
     rating: 4.6,
     reviewCount: 121,
@@ -364,7 +360,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all"],
     price: 32,
     currency: "USD",
-    images: gallery("spray", "gold"),
+    images: [`/images/products/daily-defense-spf-50.jpg`],
     variants: [{ id: "v-50ml", label: "50ml", priceModifier: 0, stock: 60 }],
     rating: 4.7,
     reviewCount: 268,
@@ -394,7 +390,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all", "dry"],
     price: 40,
     currency: "USD",
-    images: gallery("spray", "forest"),
+    images: [`/images/products/botanical-body-oil.jpg`],
     variants: [
       { id: "v-100ml", label: "100ml", priceModifier: 0, stock: 12 },
       { id: "v-200ml", label: "200ml", priceModifier: 16, stock: 0 },
@@ -430,7 +426,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "sensitive", "all"],
     price: 26,
     currency: "USD",
-    images: gallery("pump", "gold"),
+    images: [`/images/products/rice-milk-gentle-cleanser.jpg`],
     variants: [
       { id: "v-150ml", label: "150ml", priceModifier: 0, stock: 46 },
     ],
@@ -471,7 +467,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["oily", "combination"],
     price: 34,
     currency: "USD",
-    images: gallery("dropper", "sage"),
+    images: [`/images/products/niacinamide-pore-serum.jpg`],
     variants: [
       { id: "v-30ml", label: "30ml", priceModifier: 0, stock: 55 },
     ],
@@ -512,7 +508,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "sensitive"],
     price: 48,
     currency: "USD",
-    images: gallery("dropper", "ink"),
+    images: [`/images/products/ceramide-barrier-serum.jpg`],
     variants: [
       { id: "v-30ml", label: "30ml", priceModifier: 0, stock: 19 },
     ],
@@ -544,7 +540,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all", "combination"],
     price: 42,
     currency: "USD",
-    images: gallery("jar", "gold"),
+    images: [`/images/products/squalane-silk-moisturizer.jpg`],
     variants: [
       { id: "v-50ml", label: "50ml", priceModifier: 0, stock: 37 },
       { id: "v-100ml", label: "100ml", priceModifier: 18, stock: 14 },
@@ -588,7 +584,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["oily", "combination"],
     price: 30,
     currency: "USD",
-    images: gallery("tube", "ink"),
+    images: [`/images/products/charcoal-purifying-mask.jpg`],
     variants: [
       { id: "v-75ml", label: "75ml", priceModifier: 0, stock: 41 },
     ],
@@ -620,7 +616,7 @@ export const baseProducts: Product[] = [
     price: 32,
     compareAtPrice: 38,
     currency: "USD",
-    images: gallery("jar", "clay"),
+    images: [`/images/products/vitamin-c-glow-mask.jpg`],
     variants: [
       { id: "v-60ml", label: "60ml", priceModifier: 0, stock: 29 },
     ],
@@ -652,7 +648,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all", "sensitive"],
     price: 28,
     currency: "USD",
-    images: gallery("pump", "sage"),
+    images: [`/images/products/everyday-mineral-spf-30.jpg`],
     variants: [
       { id: "v-50ml", label: "50ml", priceModifier: 0, stock: 63 },
     ],
@@ -693,7 +689,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all"],
     price: 30,
     currency: "USD",
-    images: gallery("jar", "clay"),
+    images: [`/images/products/coconut-body-butter.jpg`],
     variants: [
       { id: "v-200ml", label: "200ml", priceModifier: 0, stock: 34 },
     ],
@@ -733,7 +729,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all", "combination"],
     price: 34,
     currency: "USD",
-    images: gallery("pump", "clay"),
+    images: [`/images/products/tinted-mineral-spf-40.jpg`],
     variants: [
       { id: "v-45ml", label: "45ml", priceModifier: 0, stock: 48 },
     ],
@@ -774,7 +770,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["all", "sensitive"],
     price: 22,
     currency: "USD",
-    images: gallery("spray", "sage"),
+    images: [`/images/products/aloe-after-sun-gel.jpg`],
     variants: [
       { id: "v-150ml", label: "150ml", priceModifier: 0, stock: 30 },
     ],
@@ -806,7 +802,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all"],
     price: 32,
     currency: "USD",
-    images: gallery("spray", "gold"),
+    images: [`/images/products/argan-body-oil.jpg`],
     variants: [
       { id: "v-100ml", label: "100ml", priceModifier: 0, stock: 26 },
     ],
@@ -837,7 +833,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all"],
     price: 16,
     currency: "USD",
-    images: gallery("tube", "sage"),
+    images: [`/images/products/shea-hand-cream.jpg`],
     variants: [
       { id: "v-75ml", label: "75ml", priceModifier: 0, stock: 58 },
     ],
@@ -873,7 +869,7 @@ export const baseProducts: Product[] = [
     price: 56,
     compareAtPrice: 66,
     currency: "USD",
-    images: gallery("dropper", "ink"),
+    images: [`/images/products/retinol-renewal-night-serum.jpg`],
     variants: [
       { id: "v-30ml", label: "30ml", priceModifier: 0, stock: 24 },
     ],
@@ -914,7 +910,7 @@ export const baseProducts: Product[] = [
     skinTypes: ["dry", "all"],
     price: 54,
     currency: "USD",
-    images: gallery("jar", "ink"),
+    images: [`/images/products/peptide-firming-moisturizer.jpg`],
     variants: [
       { id: "v-50ml", label: "50ml", priceModifier: 0, stock: 21 },
     ],

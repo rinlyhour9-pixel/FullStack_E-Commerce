@@ -15,6 +15,18 @@ const TINTS: Record<ArtTint, { bg1: string; bg2: string; body: string; bodyDark:
 };
 
 export function ProductArt({ artKey, className = "", label }: ProductArtProps) {
+  if (artKey.startsWith("/images/")) {
+    return (
+      <div
+        className={`relative flex items-center justify-center overflow-hidden ${className}`}
+        role="img"
+        aria-label={label ?? "Product image"}
+      >
+        <img src={artKey} alt={label ?? "Product"} className="h-full w-full object-cover" loading="lazy" />
+      </div>
+    );
+  }
+
   const { shape, tint, variant } = parseArtKey(artKey);
   const c = TINTS[tint] ?? TINTS.forest;
   const rotate = [-3, 2, -1, 3][variant % 4];
