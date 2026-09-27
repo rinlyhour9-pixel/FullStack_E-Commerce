@@ -10,15 +10,19 @@ import { BagIcon, ChevronDownIcon } from "../../components/ui/icons";
 const STATUS_OPTIONS: OrderStatus[] = ["pending", "processing", "shipped", "delivered", "cancelled"];
 
 export function AdminOrders() {
-  const { orders, updateStatus } = useOrders();
+  const { orders, updateStatus, isLoading, error } = useOrders();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const handleStatusChange = async (id: string, status: OrderStatus) => { setStatusError(null); try { await updateStatus(id, status); } catch (e) { setStatusError(e instanceof Error ? e.message : "Could not update order status"); } };
 
   const filtered = useMemo(
     () => (statusFilter === "all" ? orders : orders.filter((o) => o.status === statusFilter)),
     [orders, statusFilter],
   );
 
+  if (isLoading) return <p role="status" className="py-8 text-sm text-ink-soft">Loading orders…</p>;
+  if (error) return <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>;
   if (orders.length === 0) {
     return (
       <div className="flex flex-col gap-6">
@@ -26,7 +30,7 @@ export function AdminOrders() {
         <EmptyState
           icon={<BagIcon className="h-6 w-6" />}
           title="No orders yet"
-          description="Demo orders placed through checkout will appear here."
+          description="Customer orders will appear here when they check out."
         />
       </div>
     );
@@ -37,7 +41,7 @@ export function AdminOrders() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl text-ink">Orders</h1>
-          <p className="mt-1 text-sm text-ink-soft">{orders.length} total demo orders</p>
+          <p className="mt-1 text-sm text-ink-soft">{orders.length} total customer orders</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -65,13 +69,14 @@ export function AdminOrders() {
       </div>
 
       <div className="flex flex-col gap-3">
+        {statusError && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{statusError}</p>}
         {filtered.map((order) => (
           <OrderRow
             key={order.id}
             order={order}
             isExpanded={expandedId === order.id}
             onToggle={() => setExpandedId((current) => (current === order.id ? null : order.id))}
-            onStatusChange={(status) => updateStatus(order.id, status)}
+            onStatusChange={(status) => { void handleStatusChange(order.id, status); }}
           />
         ))}
       </div>

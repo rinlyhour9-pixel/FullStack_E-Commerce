@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { categoryLabels } from "../data/products";
-import { useProducts } from "../context/ProductsContext";
 import { useLanguage } from "../context/LanguageContext";
 import type { Product, ProductCategory, SkinType } from "../types/product";
 import { ProductGrid } from "../components/product/ProductGrid";
-import { PRICE_BUCKETS, ShopFilters } from "../components/product/ShopFilters";
+import { ShopFilters } from "../components/product/ShopFilters";
 import { SortSelect } from "../components/product/SortSelect";
 import type { SortOption } from "../components/product/SortSelect";
 import { EmptyState } from "../components/ui/EmptyState";
 import { Button } from "../components/ui/Button";
 import { CloseIcon, SearchIcon } from "../components/ui/icons";
+import { api } from "../api/client";
 
 const ALL_CATEGORIES = Object.keys(categoryLabels) as ProductCategory[];
 
@@ -32,7 +32,6 @@ function sortProducts(list: Product[], sort: SortOption): Product[] {
 }
 
 export function Shop() {
-  const { products } = useProducts();
   const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get("category");
@@ -47,6 +46,10 @@ export function Shop() {
   const [sort, setSort] = useState<SortOption>("featured");
   const [isMobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [apiProducts, setApiProducts] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [pageCount, setPageCount] = useState(1);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     if (categoryParam) setSelectedCategories([categoryParam as ProductCategory]);
@@ -56,11 +59,21 @@ export function Shop() {
     setSearchTerm(queryParam);
   }, [queryParam]);
 
+  useEffect(() => { setPage(1); }, [selectedCategories, selectedSkinTypes, sort, searchTerm]);
+
   useEffect(() => {
-    setIsLoading(true);
-    const timer = window.setTimeout(() => setIsLoading(false), 320);
-    return () => window.clearTimeout(timer);
-  }, [selectedCategories, selectedPriceBuckets, selectedSkinTypes, sort, searchTerm]);
+    let active = true;
+    setIsLoading(true); setServerError(null);
+    const timer = window.setTimeout(() => {
+      const params = new URLSearchParams({ page: String(page), limit: "12", sort });
+      if (selectedCategories.length) params.set("category", selectedCategories.join(","));
+      if (selectedSkinTypes.length) params.set("skinType", selectedSkinTypes.join(","));
+      if (searchTerm.trim()) params.set("search", searchTerm.trim());
+      if (selectedPriceBuckets.length) params.set("priceBuckets", selectedPriceBuckets.join(","));
+      void api.get<{ items: Product[]; pageCount: number }>(`/products?${params}`).then((result) => { if (active) { setApiProducts(result.items); setPageCount(result.pageCount); } }).catch((e) => { if (active) setServerError(e instanceof Error ? e.message : "Could not load products"); }).finally(() => { if (active) setIsLoading(false); });
+    }, 220);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [selectedCategories, selectedSkinTypes, selectedPriceBuckets, sort, searchTerm, page]);
 
   useEffect(() => {
     if (isMobileFiltersOpen) {
@@ -98,29 +111,8 @@ export function Shop() {
   };
 
   const filtered = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    const result = products.filter((product) => {
-      const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(product.category);
-      const matchesPrice =
-        selectedPriceBuckets.length === 0 ||
-        selectedPriceBuckets.some((id) => {
-          const bucket = PRICE_BUCKETS.find((b) => b.id === id);
-          return bucket && product.price >= bucket.min && product.price < bucket.max;
-        });
-      const matchesSkinType =
-        selectedSkinTypes.length === 0 ||
-        selectedSkinTypes.some((type) => product.skinTypes.includes(type));
-      const matchesSearch =
-        !term ||
-        product.name.toLowerCase().includes(term) ||
-        product.tagline.toLowerCase().includes(term) ||
-        product.description.toLowerCase().includes(term);
-
-      return matchesCategory && matchesPrice && matchesSkinType && matchesSearch;
-    });
-    return sortProducts(result, sort);
-  }, [selectedCategories, selectedPriceBuckets, selectedSkinTypes, searchTerm, sort, products]);
+    return sortProducts(apiProducts, sort);
+  }, [sort, apiProducts]);
 
   const hasActiveFilters =
     selectedCategories.length > 0 || selectedPriceBuckets.length > 0 || selectedSkinTypes.length > 0;
@@ -208,6 +200,7 @@ export function Shop() {
         <aside className="hidden lg:block">{renderFiltersPanel(true)}</aside>
 
         <div>
+          {serverError && <p role="alert" className="mb-4 rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{serverError}</p>}
           {filtered.length === 0 && !isLoading ? (
             <EmptyState
               icon={<SearchIcon className="h-7 w-7" />}
@@ -222,6 +215,7 @@ export function Shop() {
           ) : (
             <ProductGrid products={filtered} isLoading={isLoading} />
           )}
+          {!isLoading && !serverError && pageCount > 1 && <div className="mt-8 flex items-center justify-center gap-4"><Button variant="outline" disabled={page <= 1} onClick={() => setPage((current) => Math.max(1, current - 1))}>Previous</Button><span className="text-sm text-ink-soft">{page} / {pageCount}</span><Button variant="outline" disabled={page >= pageCount} onClick={() => setPage((current) => Math.min(pageCount, current + 1))}>Next</Button></div>}
         </div>
       </div>
 

@@ -12,13 +12,15 @@ import { formatPrice } from "../utils/format";
 const FREE_SHIPPING_THRESHOLD = 50;
 
 export function Cart() {
-  const { lineDetails, subtotal, updateQuantity, removeFromCart } = useCart();
+  const { lineDetails, subtotal, updateQuantity, removeFromCart, error, isLoading } = useCart();
   const { showToast } = useToast();
   const { t } = useLanguage();
 
+  if (isLoading) return <div className="container-shop flex min-h-[45vh] items-center justify-center text-sm text-ink-soft" role="status">Loading your cart…</div>;
   if (lineDetails.length === 0) {
     return (
       <div className="container-shop py-20">
+        {error && <p role="alert" className="mx-auto mb-4 max-w-xl rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
         <EmptyState
           icon={<BagIcon className="h-7 w-7" />}
           title={t.cart.emptyTitle}
@@ -43,6 +45,7 @@ export function Cart() {
 
   return (
     <div className="container-shop py-10 sm:py-14">
+      {error && <p role="alert" className="mb-4 rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
       <h1 className="font-display text-3xl text-ink sm:text-4xl">{t.cart.title}</h1>
 
       <div className="mt-4 rounded-2xl border border-line bg-white p-4">

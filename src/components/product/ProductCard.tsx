@@ -30,15 +30,15 @@ export function ProductCard({ product }: ProductCardProps) {
     limited: t.common.limited,
   };
 
-  const handleQuickAdd = () => {
+  const handleQuickAdd = async () => {
     if (!productInStock || !isVariantInStock(defaultVariant)) return;
-    addToCart(product.id, defaultVariant.id, 1);
-    showToast(`${product.name} ${t.common.addedToBagSuffix}`, "success");
+    if (await addToCart(product.id, defaultVariant.id, 1)) showToast(`${product.name} ${t.common.addedToBagSuffix}`, "success");
+    else showToast(t.checkout.requireSignIn, "error");
   };
 
-  const handleWishlist = () => {
-    toggle(product.id);
-    showToast(`${product.name} ${saved ? t.common.removedFromWishlistSuffix : t.common.savedToWishlistSuffix}`, "info");
+  const handleWishlist = async () => {
+    if (await toggle(product.id)) showToast(`${product.name} ${saved ? t.common.removedFromWishlistSuffix : t.common.savedToWishlistSuffix}`, "info");
+    else showToast(t.checkout.requireSignIn, "error");
   };
 
   return (

@@ -11,11 +11,12 @@ import { formatDate, formatPrice } from "../utils/format";
 import { BagIcon, ChartBarIcon, LeafMarkIcon, UserIcon } from "../components/ui/icons";
 
 export function Account() {
-  const { user, signOut } = useAuth();
-  const { getOrdersByEmail } = useOrders();
+  const { user, signOut, isLoading: authLoading } = useAuth();
+  const { orders, isLoading, error } = useOrders();
   const { showToast } = useToast();
   const { t } = useLanguage();
 
+  if (authLoading) return <div className="container-shop flex min-h-[60vh] items-center justify-center text-sm text-ink-soft" role="status">Loading your account…</div>;
   if (!user) {
     return (
       <div className="container-shop flex min-h-[60vh] items-center justify-center py-16">
@@ -42,7 +43,6 @@ export function Account() {
     );
   }
 
-  const orders = getOrdersByEmail(user.email);
 
   const handleSignOut = () => {
     signOut();
@@ -63,10 +63,6 @@ export function Account() {
         </Button>
       </div>
 
-      <div className="mb-6 rounded-2xl border border-gold/30 bg-gold/10 px-4 py-3 text-sm text-clay-dark">
-        {t.account.demoNotice}
-      </div>
-
       {user.role === "admin" && (
         <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-forest/20 bg-forest/5 px-4 py-3">
           <p className="flex items-center gap-2 text-sm text-forest-dark">
@@ -83,7 +79,7 @@ export function Account() {
           <h2 className="mb-4 flex items-center gap-2 font-display text-xl text-ink">
             <BagIcon className="h-5 w-5 text-forest" /> {t.account.orderHistory}
           </h2>
-          {orders.length === 0 ? (
+          {isLoading ? <p className="py-8 text-sm text-ink-soft" role="status">Loading your orders…</p> : error ? <p className="py-8 text-sm text-clay-dark" role="alert">{error}</p> : orders.length === 0 ? (
             <EmptyState
               icon={<BagIcon className="h-6 w-6" />}
               title={t.account.noOrdersTitle}

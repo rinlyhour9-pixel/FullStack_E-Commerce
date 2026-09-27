@@ -4,6 +4,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { Button } from "../ui/Button";
 import { Reveal } from "../ui/Reveal";
 import { LeafMarkIcon } from "../ui/icons";
+import { api } from "../../api/client";
 
 export function Newsletter() {
   const [email, setEmail] = useState("");
@@ -18,9 +19,10 @@ export function Newsletter() {
       return;
     }
     setStatus("loading");
-    await new Promise((resolve) => window.setTimeout(resolve, 500));
+    try { await api.post("/newsletter/subscribe", { email }); }
+    catch (error) { setStatus("idle"); showToast(error instanceof Error ? error.message : "Subscription failed. Please try again.", "error"); return; }
     setStatus("idle");
-    showToast("Welcome to TAMJIT — check your inbox for 10% off.", "success");
+    showToast("You are subscribed to TAMJIT updates.", "success");
     setEmail("");
   };
 

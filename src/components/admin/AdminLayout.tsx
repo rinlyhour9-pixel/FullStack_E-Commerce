@@ -5,7 +5,10 @@ import { LeafMarkIcon, LogOutIcon, MenuIcon, CloseIcon, ChartBarIcon, GridIcon, 
 
 const NAV_LINKS = [
   { to: "/admin/dashboard", label: "Dashboard", icon: ChartBarIcon },
+  { to: "/admin/pos", label: "Point of sale", icon: BagIcon },
   { to: "/admin/products", label: "Products", icon: GridIcon },
+  { to: "/admin/inventory", label: "Inventory", icon: GridIcon },
+  { to: "/admin/sales", label: "Sales", icon: ChartBarIcon },
   { to: "/admin/orders", label: "Orders", icon: BagIcon },
   { to: "/admin/customers", label: "Customers", icon: UsersIcon },
 ];

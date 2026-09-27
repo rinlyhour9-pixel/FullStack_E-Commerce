@@ -12,14 +12,16 @@ import { Link } from "react-router-dom";
 import { getDefaultVariant, isProductInStock } from "../utils/inventory";
 
 export function Wishlist() {
-  const { items, remove } = useWishlist();
+  const { items, remove, error, isLoading } = useWishlist();
   const { addToCart } = useCart();
   const { showToast } = useToast();
   const { t } = useLanguage();
 
+  if (isLoading) return <div className="container-shop flex min-h-[45vh] items-center justify-center text-sm text-ink-soft" role="status">Loading your wishlist…</div>;
   if (items.length === 0) {
     return (
       <div className="container-shop py-20">
+        {error && <p role="alert" className="mx-auto mb-4 max-w-xl rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
         <EmptyState
           icon={<HeartIcon className="h-7 w-7" />}
           title={t.wishlist.emptyTitle}
@@ -34,8 +36,8 @@ export function Wishlist() {
     );
   }
 
-  const handleAddToCart = (productId: string, variantId: string, name: string) => {
-    addToCart(productId, variantId, 1);
+  const handleAddToCart = async (productId: string, variantId: string, name: string) => {
+    if (!(await addToCart(productId, variantId, 1))) { showToast(t.checkout.requireSignIn, "error"); return; }
     showToast(`${name} ${t.common.addedToBagSuffix}`, "success");
   };
 
@@ -46,6 +48,7 @@ export function Wishlist() {
 
   return (
     <div className="container-shop py-10 sm:py-14">
+      {error && <p role="alert" className="mb-4 rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
       <h1 className="font-display text-3xl text-ink sm:text-4xl">{t.wishlist.title}</h1>
       <p className="mt-2 text-sm text-ink-soft">
         {items.length} {t.wishlist.countSuffix}

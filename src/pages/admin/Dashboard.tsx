@@ -1,4 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../api/client";
 import { useOrders } from "../../context/OrdersContext";
 import { useProducts } from "../../context/ProductsContext";
 import { StatCard } from "../../components/admin/StatCard";
@@ -11,10 +13,13 @@ import { BagIcon, ChartBarIcon, DollarIcon, GridIcon } from "../../components/ui
 export function AdminDashboard() {
   const { orders } = useOrders();
   const { products } = useProducts();
+  const [stats, setStats] = useState<{ revenue: number; orders: number; products: number; customers: number; averageTicket?: number; posSales?: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => { void api.get<typeof stats extends infer T ? Exclude<T, null> : never>("/admin/stats").then(setStats).catch((e) => setError(e instanceof Error ? e.message : "Could not load dashboard")); }, []);
 
   const activeOrders = orders.filter((order) => order.status !== "cancelled");
-  const totalRevenue = activeOrders.reduce((sum, order) => sum + order.total, 0);
-  const avgOrderValue = activeOrders.length ? totalRevenue / activeOrders.length : 0;
+  const totalRevenue = stats?.revenue ?? 0;
+  const avgOrderValue = stats?.averageTicket ?? (activeOrders.length ? activeOrders.reduce((sum, order) => sum + order.total, 0) / activeOrders.length : 0);
 
   const productSales = new Map<string, { name: string; quantity: number; revenue: number }>();
   activeOrders.forEach((order) => {
@@ -37,18 +42,19 @@ export function AdminDashboard() {
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="font-display text-3xl text-ink">Dashboard</h1>
-        <p className="mt-1 text-sm text-ink-soft">An overview of your demo storefront's activity.</p>
+        <p className="mt-1 text-sm text-ink-soft">Live activity from your store database.</p>
       </div>
+      {error && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Total revenue" value={formatPrice(totalRevenue)} icon={<DollarIcon className="h-5 w-5" />} />
-        <StatCard label="Orders" value={String(activeOrders.length)} icon={<BagIcon className="h-5 w-5" />} />
+        <StatCard label="Transactions" value={String(stats?.orders ?? activeOrders.length)} icon={<BagIcon className="h-5 w-5" />} />
         <StatCard
           label="Avg. order value"
           value={formatPrice(avgOrderValue)}
           icon={<ChartBarIcon className="h-5 w-5" />}
         />
-        <StatCard label="Products listed" value={String(products.length)} icon={<GridIcon className="h-5 w-5" />} />
+        <StatCard label="Products listed" value={String(stats?.products ?? products.length)} icon={<GridIcon className="h-5 w-5" />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

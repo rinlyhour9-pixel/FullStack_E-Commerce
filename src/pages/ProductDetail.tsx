@@ -21,7 +21,7 @@ import { EmptyState } from "../components/ui/EmptyState";
 
 export function ProductDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const { getBySlug, getRelated } = useProducts();
+  const { getBySlug, getRelated, isLoading: productsLoading, error: productsError, refresh } = useProducts();
   const product = getBySlug(slug ?? "");
   const { addToCart } = useCart();
   const { isSaved, toggle } = useWishlist();
@@ -33,6 +33,9 @@ export function ProductDetail() {
 
   const [selectedVariantId, setSelectedVariantId] = useState(product?.variants[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
+
+  if (productsLoading) return <div className="container-shop py-20 text-center text-sm text-ink-soft" role="status">Loading product…</div>;
+  if (productsError) return <div className="container-shop py-20 text-center"><p role="alert" className="text-sm text-clay-dark">{productsError}</p><Button variant="outline" className="mt-4" onClick={() => void refresh()}>Try again</Button></div>;
 
   useEffect(() => {
     if (product) {
@@ -63,9 +66,9 @@ export function ProductDetail() {
   const saved = isSaved(product.id);
   const related = getRelated(product);
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!isVariantInStock(selectedVariant)) return;
-    addToCart(product.id, selectedVariant.id, quantity);
+    if (!(await addToCart(product.id, selectedVariant.id, quantity))) { showToast(t.checkout.requireSignIn, "error"); return; }
     showToast(`${quantity} × ${product.name} (${selectedVariant.label}) ${t.common.addedToBagSuffix}`, "success");
     openCart();
   };
@@ -133,8 +136,8 @@ export function ProductDetail() {
               </Button>
               <button
                 type="button"
-                onClick={() => {
-                  toggle(product.id);
+                onClick={async () => {
+                  if (!(await toggle(product.id))) { showToast(t.checkout.requireSignIn, "error"); return; }
                   showToast(`${product.name} ${saved ? t.common.removedFromWishlistSuffix : t.common.savedToWishlistSuffix}`, "info");
                 }}
                 className="flex h-13 w-13 shrink-0 items-center justify-center rounded-full border border-ink/15 text-ink transition hover:border-clay hover:text-clay-dark"

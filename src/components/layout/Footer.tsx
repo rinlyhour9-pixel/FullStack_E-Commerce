@@ -4,9 +4,11 @@ import { useToast } from "../../context/ToastContext";
 import { useLanguage } from "../../context/LanguageContext";
 import { LeafMarkIcon } from "../ui/icons";
 import { Logo } from "./Logo";
+import { api } from "../../api/client";
 
 export function Footer() {
   const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const { showToast } = useToast();
   const { t, language } = useLanguage();
   const km = language === "km";
@@ -42,12 +44,16 @@ export function Footer() {
     },
   ];
 
-  const handleSubscribe = (event: React.FormEvent) => {
+  const handleSubscribe = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!email.includes("@")) {
       showToast("Enter a valid email to subscribe.", "error");
       return;
     }
+    setSubmitting(true);
+    try { await api.post("/newsletter/subscribe", { email }); }
+    catch (error) { showToast(error instanceof Error ? error.message : "Subscription failed. Please try again.", "error"); setSubmitting(false); return; }
+    setSubmitting(false);
     showToast("You're on the list — welcome to TAMJIT.", "success");
     setEmail("");
   };
@@ -100,6 +106,7 @@ export function Footer() {
             />
             <button
               type="submit"
+              disabled={submitting}
               className="shrink-0 rounded-full bg-forest px-5 py-2.5 text-sm font-medium text-cream transition hover:bg-forest-dark"
             >
               {t.footer.join}

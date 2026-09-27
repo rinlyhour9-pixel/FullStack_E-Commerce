@@ -30,15 +30,11 @@ export interface Order {
   tax: number;
   total: number;
   status: OrderStatus;
+  paymentMethod?: "cash_on_delivery";
 }
 
 export interface PlaceOrderInput {
   customerName: string;
-  customerEmail: string;
-  items: OrderItem[];
+  customerEmail?: string;
   shippingAddress: OrderAddress;
-  subtotal: number;
-  shipping: number;
-  tax: number;
-  total: number;
 }

@@ -1,5 +1,7 @@
-import { cloneElement, useMemo, useState } from "react";
+import { cloneElement, useEffect, useMemo, useState } from "react";
 import type { FormEvent, ReactElement } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useOrders } from "../context/OrdersContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -19,10 +21,6 @@ interface FormState {
   city: string;
   postalCode: string;
   country: string;
-  cardName: string;
-  cardNumber: string;
-  cardExpiry: string;
-  cardCvc: string;
 }
 
 const INITIAL_FORM: FormState = {
@@ -33,10 +31,6 @@ const INITIAL_FORM: FormState = {
   city: "",
   postalCode: "",
   country: "",
-  cardName: "",
-  cardNumber: "",
-  cardExpiry: "",
-  cardCvc: "",
 };
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
@@ -50,21 +44,23 @@ function validate(form: FormState, errorText: Translations["checkout"]["errors"]
   if (!form.city.trim()) errors.city = errorText.city;
   if (!/^[a-zA-Z0-9\- ]{3,10}$/.test(form.postalCode.trim())) errors.postalCode = errorText.postalCode;
   if (!form.country.trim()) errors.country = errorText.country;
-  if (!form.cardName.trim()) errors.cardName = errorText.cardName;
-  if (!/^\d{13,19}$/.test(form.cardNumber.replace(/\s/g, ""))) errors.cardNumber = errorText.cardNumber;
-  if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(form.cardExpiry.trim())) errors.cardExpiry = errorText.cardExpiry;
-  if (!/^\d{3,4}$/.test(form.cardCvc.trim())) errors.cardCvc = errorText.cardCvc;
   return errors;
 }
 
 export function Checkout() {
   const { lineDetails, subtotal, clearCart } = useCart();
   const { placeOrder } = useOrders();
+  const { user } = useAuth();
   const { t } = useLanguage();
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmedOrder, setConfirmedOrder] = useState<Order | null>(null);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) setForm((current) => ({ ...current, email: user.email, firstName: user.name.split(" ")[0] ?? "", lastName: user.name.split(" ").slice(1).join(" ") }));
+  }, [user]);
 
   const shipping = subtotal > 0 && subtotal < 50 ? 6 : 0;
   const tax = useMemo(() => Math.round(subtotal * 0.08 * 100) / 100, [subtotal]);
@@ -86,38 +82,30 @@ export function Checkout() {
     }
 
     setIsSubmitting(true);
-    await new Promise((resolve) => window.setTimeout(resolve, 900));
-    setIsSubmitting(false);
-
-    const order = placeOrder({
-      customerName: `${form.firstName} ${form.lastName}`.trim(),
-      customerEmail: form.email,
-      items: lineDetails.map(({ product, variant, unitPrice, lineTotal, line }) => ({
-        productId: product.id,
-        productName: product.name,
-        variantId: variant.id,
-        variantLabel: variant.label,
-        artKey: product.images[0],
-        quantity: line.quantity,
-        unitPrice,
-        lineTotal,
-      })),
-      shippingAddress: {
-        address: form.address,
-        city: form.city,
-        postalCode: form.postalCode,
-        country: form.country,
-      },
-      subtotal,
-      shipping,
-      tax,
-      total,
-    });
-
-    setConfirmedOrder(order);
-    clearCart();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    setServerError(null);
+    try {
+      const order = await placeOrder({
+        customerName: `${form.firstName} ${form.lastName}`.trim(),
+        customerEmail: form.email,
+        shippingAddress: { address: form.address, city: form.city, postalCode: form.postalCode, country: form.country },
+      });
+      setConfirmedOrder(order);
+      clearCart();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      setServerError(error instanceof Error ? error.message : "We could not place your order. Please try again.");
+    } finally { setIsSubmitting(false); }
   };
+
+  if (!user) {
+    return (
+      <div className="container-shop flex min-h-[55vh] flex-col items-center justify-center py-16 text-center">
+        <h1 className="font-display text-3xl text-ink">{t.checkout.title}</h1>
+        <p className="mt-3 max-w-md text-sm text-ink-soft">{t.checkout.requireSignIn}</p>
+        <div className="mt-6 flex gap-3"><Link to="/sign-in" state={{ from: "/checkout" }} className="rounded-full bg-forest px-5 py-3 text-sm font-medium text-cream">{t.auth.signInButton}</Link><Link to="/register" state={{ from: "/checkout" }} className="rounded-full border border-ink/20 px-5 py-3 text-sm font-medium text-ink">{t.auth.createAccountButton}</Link></div>
+      </div>
+    );
+  }
 
   if (confirmedOrder) {
     return (
@@ -133,8 +121,7 @@ export function Checkout() {
             {t.checkout.thankYou} {form.firstName}!
           </h1>
           <p className="mt-3 text-ink-soft">
-            <span className="font-semibold text-ink">#{confirmedOrder.id}</span> {t.checkout.confirmationNote}{" "}
-            <span className="font-medium text-ink">{form.email}</span>.
+            <span className="font-semibold text-ink">#{confirmedOrder.id}</span> {t.checkout.confirmationNote}
           </p>
 
           <div className="mt-8 rounded-3xl border border-line bg-white p-6 text-left">
@@ -262,57 +249,9 @@ export function Checkout() {
             </div>
           </section>
 
-          <section>
-            <div className="mb-4 flex items-center gap-2">
-              <h2 className="font-display text-xl text-ink">{t.checkout.payment}</h2>
-              <span className="rounded-full bg-gold/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-clay-dark">
-                {t.checkout.demoOnly}
-              </span>
-            </div>
-            <p className="mb-4 text-sm text-ink-soft">{t.checkout.demoPaymentNote}</p>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <Field id="name-on-card" label={t.checkout.nameOnCard} error={errors.cardName} className="sm:col-span-2">
-                <input
-                  autoComplete="cc-name"
-                  value={form.cardName}
-                  onChange={updateField("cardName")}
-                  aria-invalid={!!errors.cardName}
-                  className={inputClass(!!errors.cardName)}
-                />
-              </Field>
-              <Field id="card-number" label={t.checkout.cardNumber} error={errors.cardNumber} className="sm:col-span-2">
-                <input
-                  inputMode="numeric"
-                  placeholder="4242 4242 4242 4242"
-                  autoComplete="cc-number"
-                  value={form.cardNumber}
-                  onChange={updateField("cardNumber")}
-                  aria-invalid={!!errors.cardNumber}
-                  className={inputClass(!!errors.cardNumber)}
-                />
-              </Field>
-              <Field id="expiry" label={t.checkout.expiry} error={errors.cardExpiry}>
-                <input
-                  placeholder="MM/YY"
-                  autoComplete="cc-exp"
-                  value={form.cardExpiry}
-                  onChange={updateField("cardExpiry")}
-                  aria-invalid={!!errors.cardExpiry}
-                  className={inputClass(!!errors.cardExpiry)}
-                />
-              </Field>
-              <Field id="security-code" label={t.checkout.securityCode} error={errors.cardCvc}>
-                <input
-                  inputMode="numeric"
-                  placeholder="CVC"
-                  autoComplete="cc-csc"
-                  value={form.cardCvc}
-                  onChange={updateField("cardCvc")}
-                  aria-invalid={!!errors.cardCvc}
-                  className={inputClass(!!errors.cardCvc)}
-                />
-              </Field>
-            </div>
+          <section className="rounded-2xl border border-line bg-white p-5">
+            <h2 className="font-display text-xl text-ink">{t.checkout.payment}</h2>
+            <p className="mt-2 text-sm text-ink-soft">{t.checkout.demoPaymentNote}</p>
           </section>
         </div>
 
@@ -359,12 +298,9 @@ export function Checkout() {
             <span>{formatPrice(total)}</span>
           </div>
 
-          <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isSubmitting}>
-            {t.checkout.placeOrder}
-          </Button>
-          <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-ink-soft">
-            <ShieldIcon className="h-4 w-4" /> {t.checkout.noRealPayment}
-          </p>
+          <Button type="submit" variant="primary" size="lg" fullWidth isLoading={isSubmitting}>{t.checkout.placeOrder}</Button>
+          {serverError && <p role="alert" className="mt-3 rounded-xl bg-clay/10 px-3 py-2 text-sm text-clay-dark">{serverError}</p>}
+          <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-ink-soft"><ShieldIcon className="h-4 w-4" /> {t.checkout.noRealPayment}</p>
         </aside>
       </form>
     </div>

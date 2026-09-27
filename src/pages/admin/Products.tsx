@@ -10,7 +10,7 @@ import { getTotalStock, isLowStock } from "../../utils/inventory";
 import { EditIcon, GridIcon, PlusIcon, SearchIcon, TrashIcon } from "../../components/ui/icons";
 
 export function AdminProducts() {
-  const { products, deleteProduct } = useProducts();
+  const { products, deleteProduct, isLoading, error } = useProducts();
   const { showToast } = useToast();
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -23,10 +23,9 @@ export function AdminProducts() {
     );
   }, [products, query]);
 
-  const handleDelete = (id: string, name: string) => {
-    deleteProduct(id);
-    setPendingDeleteId(null);
-    showToast(`${name} was removed from the catalog.`, "info");
+  const handleDelete = async (id: string, name: string) => {
+    try { await deleteProduct(id); setPendingDeleteId(null); showToast(`${name} was removed from the catalog.`, "info"); }
+    catch (e) { showToast(e instanceof Error ? e.message : "Product could not be removed.", "error"); }
   };
 
   return (
@@ -40,6 +39,7 @@ export function AdminProducts() {
           Add product
         </Button>
       </div>
+      {error && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
 
       <div className="relative max-w-xs">
         <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-soft" />
@@ -53,7 +53,7 @@ export function AdminProducts() {
         />
       </div>
 
-      {filtered.length === 0 ? (
+      {isLoading ? <p className="py-8 text-sm text-ink-soft" role="status">Loading products…</p> : filtered.length === 0 ? (
         <EmptyState
           icon={<GridIcon className="h-6 w-6" />}
           title="No products found"

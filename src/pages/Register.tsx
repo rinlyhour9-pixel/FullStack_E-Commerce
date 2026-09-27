@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -12,6 +12,7 @@ export function Register() {
   const { showToast } = useToast();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +24,7 @@ export function Register() {
     const result = await register(name, email, password);
     if (result.ok) {
       showToast(t.auth.accountCreated, "success");
-      navigate("/account");
+      navigate((location.state as { from?: string } | null)?.from ?? "/account");
     } else {
       setError(result.error);
     }

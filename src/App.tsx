@@ -26,6 +26,9 @@ import { AdminProducts } from "./pages/admin/Products";
 import { AdminProductForm } from "./pages/admin/ProductForm";
 import { AdminOrders } from "./pages/admin/Orders";
 import { AdminCustomers } from "./pages/admin/Customers";
+import { AdminPos } from "./pages/admin/Pos";
+import { AdminInventory } from "./pages/admin/Inventory";
+import { AdminSales } from "./pages/admin/Sales";
 import { RoutineFinder } from "./pages/RoutineFinder";
 import { StoreInformation } from "./pages/StoreInformation";
 
@@ -61,6 +64,9 @@ export default function App() {
                         <Route element={<AdminLayout />}>
                           <Route index element={<Navigate to="dashboard" replace />} />
                           <Route path="dashboard" element={<AdminDashboard />} />
+                          <Route path="pos" element={<AdminPos />} />
+                          <Route path="inventory" element={<AdminInventory />} />
+                          <Route path="sales" element={<AdminSales />} />
                           <Route path="products" element={<AdminProducts />} />
                           <Route path="products/new" element={<AdminProductForm />} />
                           <Route path="products/:id/edit" element={<AdminProductForm />} />

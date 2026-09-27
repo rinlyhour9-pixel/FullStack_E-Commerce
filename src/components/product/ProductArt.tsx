@@ -15,14 +15,17 @@ const TINTS: Record<ArtTint, { bg1: string; bg2: string; body: string; bodyDark:
 };
 
 export function ProductArt({ artKey, className = "", label }: ProductArtProps) {
-  if (artKey.startsWith("/images/")) {
+  if (artKey.startsWith("/images/") || artKey.startsWith("/uploads/")) {
+    const imageSrc = artKey.startsWith("/uploads/")
+      ? `${(import.meta.env.VITE_API_URL ?? "http://localhost:3001/api").replace(/\/api\/?$/, "")}${artKey}`
+      : artKey;
     return (
       <div
         className={`relative flex items-center justify-center overflow-hidden ${className}`}
         role="img"
         aria-label={label ?? "Product image"}
       >
-        <img src={artKey} alt={label ?? "Product"} className="h-full w-full object-cover" loading="lazy" />
+        <img src={imageSrc} alt={label ?? "Product"} className="h-full w-full object-cover" loading="lazy" />
       </div>
     );
   }

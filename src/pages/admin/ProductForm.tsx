@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { api } from "../../api/client";
 import { useProducts } from "../../context/ProductsContext";
 import { useToast } from "../../context/ToastContext";
 import { categoryLabels } from "../../data/products";
@@ -31,7 +32,7 @@ function makeVariantRow(): VariantRow {
 export function AdminProductForm() {
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
-  const { getById, addProduct, updateProduct } = useProducts();
+  const { getById, addProduct, updateProduct, isLoading: productsLoading } = useProducts();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -49,6 +50,8 @@ export function AdminProductForm() {
   const [badges, setBadges] = useState<string[]>(existing?.badges ?? []);
   const [shape, setShape] = useState<BottleShape>("jar");
   const [tint, setTint] = useState<ArtTint>("forest");
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [howToUse, setHowToUse] = useState(existing?.howToUse.join("\n") ?? "");
   const [ingredients, setIngredients] = useState(existing?.ingredients.join(", ") ?? "");
   const [variants, setVariants] = useState<VariantRow[]>(
@@ -57,13 +60,40 @@ export function AdminProductForm() {
       : [makeVariantRow()],
   );
   const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
-    if (isEditing && !existing) {
+    if (isEditing && !existing && !productsLoading) {
       showToast("That product could not be found.", "error");
       navigate("/admin/products");
     }
-  }, [isEditing, existing, navigate, showToast]);
+  }, [isEditing, existing, productsLoading, navigate, showToast]);
+
+  useEffect(() => {
+    if (!existing) return;
+    setName(existing.name); setTagline(existing.tagline); setDescription(existing.description); setCategory(existing.category);
+    setPrice(String(existing.price)); setCompareAtPrice(existing.compareAtPrice === undefined ? "" : String(existing.compareAtPrice));
+    setSkinTypes(existing.skinTypes); setBadges(existing.badges ?? []); setHowToUse(existing.howToUse.join("\n")); setIngredients(existing.ingredients.join(", "));
+    setVariants(existing.variants.map((v) => ({ key: v.id, label: v.label, priceModifier: String(v.priceModifier), stock: String(v.stock) })));
+  }, [existing]);
+
+  useEffect(() => {
+    const previews = imageFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
+    return () => previews.forEach((preview) => URL.revokeObjectURL(preview));
+  }, [imageFiles]);
+
+  const selectImages = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.currentTarget.files ?? []);
+    event.currentTarget.value = "";
+    if (files.length > 4) return setError("Choose up to 4 product photos.");
+    if (files.some((file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
+      return setError("Photos must be JPG, PNG, or WebP files.");
+    }
+    if (files.some((file) => file.size > 5 * 1024 * 1024)) return setError("Each photo must be 5 MB or smaller.");
+    setError(null);
+    setImageFiles(files);
+  };
 
   const toggleSkinType = (type: SkinType) => {
     setSkinTypes((current) => (current.includes(type) ? current.filter((t) => t !== type) : [...current, type]));
@@ -83,7 +113,7 @@ export function AdminProductForm() {
 
   const previewArtKey = makeArtKey(shape, tint, 0);
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
 
@@ -96,7 +126,7 @@ export function AdminProductForm() {
 
     const compareValue = compareAtPrice.trim() ? Number(compareAtPrice) : undefined;
 
-    const images = [0, 1, 2, 3].map((variant) => makeArtKey(shape, tint, variant));
+    const images = existing?.images.length ? existing.images : [0, 1, 2, 3].map((variant) => makeArtKey(shape, tint, variant));
 
     const productData: Omit<Product, "id" | "slug" | "rating" | "reviewCount" | "reviews"> = {
       name: name.trim(),
@@ -119,14 +149,19 @@ export function AdminProductForm() {
       ingredients: ingredients.split(",").map((s) => s.trim()).filter(Boolean),
     };
 
-    if (isEditing && existing) {
-      updateProduct(existing.id, productData);
-      showToast(`${productData.name} was updated.`, "success");
-    } else {
-      addProduct(productData);
-      showToast(`${productData.name} was added to your catalog.`, "success");
-    }
-    navigate("/admin/products");
+    setIsSaving(true);
+    try {
+      if (imageFiles.length) {
+        productData.images = await Promise.all(imageFiles.map(async (file) => {
+          const uploaded = await api.upload<{ path: string }>("/admin/products/upload-image", file);
+          return uploaded.path;
+        }));
+      }
+      if (isEditing && existing) { await updateProduct(existing.id, productData); showToast(`${productData.name} was updated.`, "success"); }
+      else { await addProduct(productData); showToast(`${productData.name} was added to your catalog.`, "success"); }
+      navigate("/admin/products");
+    } catch (e) { setError(e instanceof Error ? e.message : "Product could not be saved."); }
+    finally { setIsSaving(false); }
   };
 
   return (
@@ -312,13 +347,27 @@ export function AdminProductForm() {
         <section className="rounded-3xl border border-line bg-white p-6">
           <h2 className="mb-4 font-display text-lg text-ink">Packaging image</h2>
           <p className="mb-4 text-sm text-ink-soft">
-            This demo store illustrates products instead of using stock photos. Pick a packaging style and color.
+            Upload product photos, or use the generated packaging illustration.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
             <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl">
-              <ProductArt artKey={previewArtKey} label="Preview" className="h-full w-full" />
+              {imagePreviews[0] ? (
+                <img src={imagePreviews[0]} alt="Product photo preview" className="h-full w-full object-cover" />
+              ) : (
+                <ProductArt artKey={isEditing && existing?.images[0] ? existing.images[0] : previewArtKey} label="Preview" className="h-full w-full" />
+              )}
             </div>
             <div className="flex flex-1 flex-col gap-4">
+              <label className="block">
+                <span className="mb-1.5 block text-xs font-medium text-ink-soft">Product photos (up to 4)</span>
+                <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={selectImages} className="block w-full text-sm text-ink-soft file:mr-3 file:rounded-full file:border-0 file:bg-forest file:px-4 file:py-2 file:font-medium file:text-cream hover:file:bg-forest-dark" />
+                <span className="mt-1.5 block text-xs text-ink-soft">JPG, PNG, or WebP; maximum 5 MB each.</span>
+              </label>
+              {imagePreviews.length > 1 && (
+                <div className="flex flex-wrap gap-2">
+                  {imagePreviews.slice(1).map((preview, index) => <img key={preview} src={preview} alt={`Product photo ${index + 2}`} className="h-16 w-16 rounded-xl object-cover" />)}
+                </div>
+              )}
               <div>
                 <span className="mb-1.5 block text-xs font-medium text-ink-soft">Shape</span>
                 <div className="flex flex-wrap gap-2">
@@ -386,7 +435,7 @@ export function AdminProductForm() {
         )}
 
         <div className="flex flex-wrap gap-3">
-          <Button type="submit" variant="primary" size="lg">
+          <Button type="submit" variant="primary" size="lg" isLoading={isSaving}>
             {isEditing ? "Save changes" : "Create product"}
           </Button>
           <Button type="button" variant="outline" size="lg" onClick={() => navigate("/admin/products")}>

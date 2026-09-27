@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
@@ -12,6 +12,7 @@ export function SignIn() {
   const { showToast } = useToast();
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export function SignIn() {
     const result = await signIn(email, password);
     if (result.ok) {
       showToast(t.auth.welcomeBack, "success");
-      navigate("/account");
+      navigate((location.state as { from?: string } | null)?.from ?? "/account");
     } else {
       setError(result.error);
     }

@@ -33,9 +33,7 @@ export function AdminLogin() {
         <div className="mb-6 text-center">
           <LeafMarkIcon className="mx-auto mb-3 h-8 w-8 text-sage" />
           <h1 className="font-display text-2xl text-cream">Seller Sign In</h1>
-          <p className="mt-1 text-sm text-cream/60">
-            Demo seller account — enter any email and a password of 6+ characters.
-          </p>
+          <p className="mt-1 text-sm text-cream/60">Sign in with the admin account created by the secure setup command.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
