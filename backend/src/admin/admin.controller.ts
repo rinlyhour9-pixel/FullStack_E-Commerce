@@ -14,11 +14,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { AdminOrderQueryDto, UpdateStatusDto, UpdateStockDto } from './admin.dto';
 import { CreatePosSaleDto } from './pos.dto';
 import { PosService } from './pos.service';
+import { ReportQueryDto } from './reports.dto';
+import { ReportsService } from './reports.service';
 
 @ApiTags('admin') @ApiBearerAuth() @UseGuards(AuthGuard) @Roles('admin') @Controller('admin')
 export class AdminController {
-  constructor(private catalog: CatalogService, private commerce: CommerceService, private prisma: PrismaService, private pos: PosService) {}
+  constructor(private catalog: CatalogService, private commerce: CommerceService, private prisma: PrismaService, private pos: PosService, private reports: ReportsService) {}
   @Get('products') products() { return this.catalog.adminList(); }
+  @Get('reports') report(@Query() query: ReportQueryDto) { return this.reports.report(query); }
   @Get('pos/config') posConfig() { return this.pos.getConfig(); }
   @Get('pos/sales') posSales() { return this.pos.listSales(); }
   @Post('pos/sales') createPosSale(@CurrentUser() user: any, @Body() body: CreatePosSaleDto) { return this.pos.createSale(user.id, body); }

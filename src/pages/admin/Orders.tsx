@@ -1,47 +1,51 @@
 import { useMemo, useState } from "react";
 import { useOrders } from "../../context/OrdersContext";
+import { useLanguage } from "../../context/LanguageContext";
 import type { Order, OrderStatus } from "../../types/order";
 import { OrderStatusBadge } from "../../components/admin/OrderStatusBadge";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { ProductArt } from "../../components/product/ProductArt";
 import { formatDate, formatPrice } from "../../utils/format";
 import { BagIcon, ChevronDownIcon } from "../../components/ui/icons";
+import type { Translations } from "../../i18n/translations";
 
 const STATUS_OPTIONS: OrderStatus[] = ["pending", "processing", "shipped", "delivered", "cancelled"];
 
 export function AdminOrders() {
   const { orders, updateStatus, isLoading, error } = useOrders();
+  const { t, language } = useLanguage();
+  const km = language === "km";
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<OrderStatus | "all">("all");
   const [statusError, setStatusError] = useState<string | null>(null);
-  const handleStatusChange = async (id: string, status: OrderStatus) => { setStatusError(null); try { await updateStatus(id, status); } catch (e) { setStatusError(e instanceof Error ? e.message : "Could not update order status"); } };
+  const handleStatusChange = async (id: string, status: OrderStatus) => { setStatusError(null); try { await updateStatus(id, status); } catch (e) { setStatusError(e instanceof Error ? e.message : t.admin.orders.statusUpdateError); } };
 
   const filtered = useMemo(
     () => (statusFilter === "all" ? orders : orders.filter((o) => o.status === statusFilter)),
     [orders, statusFilter],
   );
 
-  if (isLoading) return <p role="status" className="py-8 text-sm text-ink-soft">Loading orders…</p>;
+  if (isLoading) return <p role="status" className={`py-8 text-sm text-ink-soft ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>{t.admin.orders.loading}</p>;
   if (error) return <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>;
   if (orders.length === 0) {
     return (
-      <div className="flex flex-col gap-6">
-        <h1 className="font-display text-3xl text-ink">Orders</h1>
+      <div className={`flex flex-col gap-6 ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>
+        <h1 className="font-display text-3xl text-ink">{t.admin.orders.title}</h1>
         <EmptyState
           icon={<BagIcon className="h-6 w-6" />}
-          title="No orders yet"
-          description="Customer orders will appear here when they check out."
+          title={t.admin.orders.emptyTitle}
+          description={t.admin.orders.emptyDesc}
         />
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={`flex flex-col gap-6 ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-ink">Orders</h1>
-          <p className="mt-1 text-sm text-ink-soft">{orders.length} total customer orders</p>
+          <h1 className="font-display text-3xl text-ink">{t.admin.orders.title}</h1>
+          <p className="mt-1 text-sm text-ink-soft">{orders.length} {t.admin.orders.countSuffix}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <button
@@ -51,7 +55,7 @@ export function AdminOrders() {
               statusFilter === "all" ? "border-forest bg-forest text-cream" : "border-ink/15 text-ink-soft hover:border-ink/30"
             }`}
           >
-            All
+            {t.admin.orders.all}
           </button>
           {STATUS_OPTIONS.map((status) => (
             <button
@@ -62,7 +66,7 @@ export function AdminOrders() {
                 statusFilter === status ? "border-forest bg-forest text-cream" : "border-ink/15 text-ink-soft hover:border-ink/30"
               }`}
             >
-              {status}
+              {t.admin.common.orderStatus[status]}
             </button>
           ))}
         </div>
@@ -77,6 +81,8 @@ export function AdminOrders() {
             isExpanded={expandedId === order.id}
             onToggle={() => setExpandedId((current) => (current === order.id ? null : order.id))}
             onStatusChange={(status) => { void handleStatusChange(order.id, status); }}
+            t={t}
+            km={km}
           />
         ))}
       </div>
@@ -89,11 +95,15 @@ function OrderRow({
   isExpanded,
   onToggle,
   onStatusChange,
+  t,
+  km,
 }: {
   order: Order;
   isExpanded: boolean;
   onToggle: () => void;
   onStatusChange: (status: OrderStatus) => void;
+  t: Translations;
+  km: boolean;
 }) {
   return (
     <div className="rounded-3xl border border-line bg-white">
@@ -112,7 +122,7 @@ function OrderRow({
           <p className="truncate text-sm text-ink">{order.customerName}</p>
           <p className="truncate text-xs text-ink-soft">{order.customerEmail}</p>
         </div>
-        <p className="shrink-0 text-sm text-ink-soft">{order.items.length} item{order.items.length === 1 ? "" : "s"}</p>
+        <p className="shrink-0 text-sm text-ink-soft">{order.items.length} {order.items.length === 1 ? t.admin.orders.item : t.admin.orders.items}</p>
         <p className="shrink-0 font-semibold text-ink">{formatPrice(order.total)}</p>
         <OrderStatusBadge status={order.status} />
       </button>
@@ -137,8 +147,8 @@ function OrderRow({
               {order.shippingAddress.address}, {order.shippingAddress.city}, {order.shippingAddress.postalCode},{" "}
               {order.shippingAddress.country}
             </div>
-            <label className="flex items-center gap-2 text-sm">
-              <span className="font-medium text-ink">Status</span>
+            <label className="flex items-center gap-2 text-sm" lang={km ? "km" : undefined}>
+              <span className={`font-medium text-ink ${km ? "font-khmer" : ""}`}>{t.admin.orders.statusLabel}</span>
               <select
                 value={order.status}
                 onChange={(event) => onStatusChange(event.target.value as OrderStatus)}
@@ -146,7 +156,7 @@ function OrderRow({
               >
                 {STATUS_OPTIONS.map((status) => (
                   <option key={status} value={status}>
-                    {status}
+                    {t.admin.common.orderStatus[status]}
                   </option>
                 ))}
               </select>

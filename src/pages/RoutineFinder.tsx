@@ -85,7 +85,7 @@ export function RoutineFinder() {
                   km ? "font-khmer-display text-3xl sm:text-4xl lg:text-5xl" : "font-display text-4xl sm:text-5xl lg:text-6xl"
                 }`}
               >
-                {t.routineFinder.titleStart} <span className="italic text-clay">{t.routineFinder.titleItalic}</span>
+                {t.routineFinder.titleStart} <span className={`${km ? "not-italic" : "italic"} text-clay`}>{t.routineFinder.titleItalic}</span>
               </h1>
               <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">{t.routineFinder.description}</p>
             </div>

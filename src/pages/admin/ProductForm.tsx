@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../api/client";
 import { useProducts } from "../../context/ProductsContext";
 import { useToast } from "../../context/ToastContext";
+import { useLanguage } from "../../context/LanguageContext";
 import { categoryLabels } from "../../data/products";
 import type { Product, ProductCategory, SkinType } from "../../types/product";
 import { makeArtKey } from "../../utils/imageKey";
@@ -34,6 +35,8 @@ export function AdminProductForm() {
   const isEditing = !!id;
   const { getById, addProduct, updateProduct, isLoading: productsLoading } = useProducts();
   const { showToast } = useToast();
+  const { t, language } = useLanguage();
+  const km = language === "km";
   const navigate = useNavigate();
 
   const existing = isEditing ? getById(id!) : undefined;
@@ -64,10 +67,10 @@ export function AdminProductForm() {
 
   useEffect(() => {
     if (isEditing && !existing && !productsLoading) {
-      showToast("That product could not be found.", "error");
+      showToast(t.admin.productForm.notFoundToast, "error");
       navigate("/admin/products");
     }
-  }, [isEditing, existing, productsLoading, navigate, showToast]);
+  }, [isEditing, existing, productsLoading, navigate, showToast, t]);
 
   useEffect(() => {
     if (!existing) return;
@@ -86,17 +89,17 @@ export function AdminProductForm() {
   const selectImages = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.currentTarget.files ?? []);
     event.currentTarget.value = "";
-    if (files.length > 4) return setError("Choose up to 4 product photos.");
+    if (files.length > 4) return setError(t.admin.productForm.errorTooManyPhotos);
     if (files.some((file) => !["image/jpeg", "image/png", "image/webp"].includes(file.type))) {
-      return setError("Photos must be JPG, PNG, or WebP files.");
+      return setError(t.admin.productForm.errorPhotoType);
     }
-    if (files.some((file) => file.size > 5 * 1024 * 1024)) return setError("Each photo must be 5 MB or smaller.");
+    if (files.some((file) => file.size > 5 * 1024 * 1024)) return setError(t.admin.productForm.errorPhotoSize);
     setError(null);
     setImageFiles(files);
   };
 
   const toggleSkinType = (type: SkinType) => {
-    setSkinTypes((current) => (current.includes(type) ? current.filter((t) => t !== type) : [...current, type]));
+    setSkinTypes((current) => (current.includes(type) ? current.filter((existingType) => existingType !== type) : [...current, type]));
   };
 
   const toggleBadge = (badge: string) => {
@@ -117,12 +120,12 @@ export function AdminProductForm() {
     event.preventDefault();
     setError(null);
 
-    if (!name.trim()) return setError("Product name is required.");
-    if (!tagline.trim()) return setError("Tagline is required.");
+    if (!name.trim()) return setError(t.admin.productForm.errorNameRequired);
+    if (!tagline.trim()) return setError(t.admin.productForm.errorTaglineRequired);
     const priceValue = Number(price);
-    if (!Number.isFinite(priceValue) || priceValue <= 0) return setError("Enter a valid price.");
-    if (variants.some((v) => !v.label.trim())) return setError("Every variant needs a size label.");
-    if (skinTypes.length === 0) return setError("Select at least one skin type.");
+    if (!Number.isFinite(priceValue) || priceValue <= 0) return setError(t.admin.productForm.errorPriceInvalid);
+    if (variants.some((v) => !v.label.trim())) return setError(t.admin.productForm.errorVariantLabel);
+    if (skinTypes.length === 0) return setError(t.admin.productForm.errorSkinType);
 
     const compareValue = compareAtPrice.trim() ? Number(compareAtPrice) : undefined;
 
@@ -157,28 +160,28 @@ export function AdminProductForm() {
           return uploaded.path;
         }));
       }
-      if (isEditing && existing) { await updateProduct(existing.id, productData); showToast(`${productData.name} was updated.`, "success"); }
-      else { await addProduct(productData); showToast(`${productData.name} was added to your catalog.`, "success"); }
+      if (isEditing && existing) { await updateProduct(existing.id, productData); showToast(`${productData.name} ${t.admin.productForm.updatedToastSuffix}`, "success"); }
+      else { await addProduct(productData); showToast(`${productData.name} ${t.admin.productForm.createdToastSuffix}`, "success"); }
       navigate("/admin/products");
-    } catch (e) { setError(e instanceof Error ? e.message : "Product could not be saved."); }
+    } catch (e) { setError(e instanceof Error ? e.message : t.admin.productForm.errorSaveFailed); }
     finally { setIsSaving(false); }
   };
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-6">
+    <div className={`mx-auto flex max-w-3xl flex-col gap-6 ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>
       <div>
-        <h1 className="font-display text-3xl text-ink">{isEditing ? "Edit product" : "Add product"}</h1>
+        <h1 className="font-display text-3xl text-ink">{isEditing ? t.admin.productForm.editTitle : t.admin.productForm.addTitle}</h1>
         <p className="mt-1 text-sm text-ink-soft">
-          {isEditing ? "Update details, pricing, and stock for this product." : "Create a new product for your storefront."}
+          {isEditing ? t.admin.productForm.editSubtitle : t.admin.productForm.addSubtitle}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-8">
         <section className="rounded-3xl border border-line bg-white p-6">
-          <h2 className="mb-4 font-display text-lg text-ink">Details</h2>
+          <h2 className="mb-4 font-display text-lg text-ink">{t.admin.productForm.detailsSection}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="sm:col-span-2">
-              <span className="mb-1.5 block text-sm font-medium text-ink">Product name</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.productName}</span>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -186,7 +189,7 @@ export function AdminProductForm() {
               />
             </label>
             <label className="sm:col-span-2">
-              <span className="mb-1.5 block text-sm font-medium text-ink">Tagline</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.tagline}</span>
               <input
                 value={tagline}
                 onChange={(e) => setTagline(e.target.value)}
@@ -194,7 +197,7 @@ export function AdminProductForm() {
               />
             </label>
             <label className="sm:col-span-2">
-              <span className="mb-1.5 block text-sm font-medium text-ink">Description</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.description}</span>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -203,7 +206,7 @@ export function AdminProductForm() {
               />
             </label>
             <label>
-              <span className="mb-1.5 block text-sm font-medium text-ink">Category</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.category}</span>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as ProductCategory)}
@@ -217,7 +220,7 @@ export function AdminProductForm() {
               </select>
             </label>
             <div>
-              <span className="mb-1.5 block text-sm font-medium text-ink">Badges</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.badges}</span>
               <div className="flex flex-wrap gap-2">
                 {BADGE_OPTIONS.map((badge) => (
                   <button
@@ -230,7 +233,7 @@ export function AdminProductForm() {
                         : "border-ink/15 text-ink-soft hover:border-ink/30"
                     }`}
                   >
-                    {badge}
+                    {t.common[badge]}
                   </button>
                 ))}
               </div>
@@ -238,7 +241,7 @@ export function AdminProductForm() {
           </div>
 
           <div className="mt-4">
-            <span className="mb-1.5 block text-sm font-medium text-ink">Skin types</span>
+            <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.skinTypes}</span>
             <div className="flex flex-wrap gap-2">
               {SKIN_TYPES.map((type) => (
                 <button
@@ -251,7 +254,7 @@ export function AdminProductForm() {
                       : "border-ink/15 text-ink-soft hover:border-ink/30"
                   }`}
                 >
-                  {type}
+                  {t.skinTypes[type]}
                 </button>
               ))}
             </div>
@@ -259,10 +262,10 @@ export function AdminProductForm() {
         </section>
 
         <section className="rounded-3xl border border-line bg-white p-6">
-          <h2 className="mb-4 font-display text-lg text-ink">Pricing</h2>
+          <h2 className="mb-4 font-display text-lg text-ink">{t.admin.productForm.pricingSection}</h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label>
-              <span className="mb-1.5 block text-sm font-medium text-ink">Base price (USD)</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.basePrice}</span>
               <input
                 type="number"
                 min="0"
@@ -273,7 +276,7 @@ export function AdminProductForm() {
               />
             </label>
             <label>
-              <span className="mb-1.5 block text-sm font-medium text-ink">Compare-at price (optional)</span>
+              <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.compareAtPrice}</span>
               <input
                 type="number"
                 min="0"
@@ -288,29 +291,29 @@ export function AdminProductForm() {
 
         <section className="rounded-3xl border border-line bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-lg text-ink">Variants &amp; stock</h2>
+            <h2 className="font-display text-lg text-ink">{t.admin.productForm.variantsSection}</h2>
             <button
               type="button"
               onClick={() => setVariants((current) => [...current, makeVariantRow()])}
               className="flex items-center gap-1.5 rounded-full border border-ink/15 px-3 py-1.5 text-xs font-semibold text-ink transition hover:border-forest hover:text-forest"
             >
-              <PlusIcon className="h-3.5 w-3.5" /> Add variant
+              <PlusIcon className="h-3.5 w-3.5" /> {t.admin.productForm.addVariant}
             </button>
           </div>
           <div className="flex flex-col gap-3">
             {variants.map((variant) => (
               <div key={variant.key} className="grid grid-cols-1 gap-3 rounded-2xl border border-line p-3 sm:grid-cols-[2fr_1fr_1fr_auto]">
                 <label>
-                  <span className="mb-1 block text-xs font-medium text-ink-soft">Size label</span>
+                  <span className="mb-1 block text-xs font-medium text-ink-soft">{t.admin.productForm.sizeLabel}</span>
                   <input
                     value={variant.label}
                     onChange={(e) => updateVariant(variant.key, { label: e.target.value })}
-                    placeholder="e.g. 50ml"
+                    placeholder={t.admin.productForm.sizePlaceholder}
                     className="w-full rounded-lg border border-ink/15 bg-white px-3 py-2 text-sm focus:border-forest focus:outline-none"
                   />
                 </label>
                 <label>
-                  <span className="mb-1 block text-xs font-medium text-ink-soft">Price add-on</span>
+                  <span className="mb-1 block text-xs font-medium text-ink-soft">{t.admin.productForm.priceAddOn}</span>
                   <input
                     type="number"
                     step="0.01"
@@ -320,7 +323,7 @@ export function AdminProductForm() {
                   />
                 </label>
                 <label>
-                  <span className="mb-1 block text-xs font-medium text-ink-soft">Stock</span>
+                  <span className="mb-1 block text-xs font-medium text-ink-soft">{t.admin.productForm.stock}</span>
                   <input
                     type="number"
                     min="0"
@@ -335,7 +338,7 @@ export function AdminProductForm() {
                   onClick={() => removeVariant(variant.key)}
                   disabled={variants.length <= 1}
                   className="self-end rounded-lg p-2 text-ink-soft transition hover:bg-clay/10 hover:text-clay-dark disabled:opacity-30"
-                  aria-label="Remove variant"
+                  aria-label={t.admin.productForm.removeVariantAria}
                 >
                   <TrashIcon className="h-4 w-4" />
                 </button>
@@ -345,31 +348,31 @@ export function AdminProductForm() {
         </section>
 
         <section className="rounded-3xl border border-line bg-white p-6">
-          <h2 className="mb-4 font-display text-lg text-ink">Packaging image</h2>
+          <h2 className="mb-4 font-display text-lg text-ink">{t.admin.productForm.packagingSection}</h2>
           <p className="mb-4 text-sm text-ink-soft">
-            Upload product photos, or use the generated packaging illustration.
+            {t.admin.productForm.packagingHint}
           </p>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
             <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl">
               {imagePreviews[0] ? (
-                <img src={imagePreviews[0]} alt="Product photo preview" className="h-full w-full object-cover" />
+                <img src={imagePreviews[0]} alt={t.admin.productForm.photoPreviewAlt} className="h-full w-full object-cover" />
               ) : (
-                <ProductArt artKey={isEditing && existing?.images[0] ? existing.images[0] : previewArtKey} label="Preview" className="h-full w-full" />
+                <ProductArt artKey={isEditing && existing?.images[0] ? existing.images[0] : previewArtKey} label={t.admin.productForm.previewLabel} className="h-full w-full" />
               )}
             </div>
             <div className="flex flex-1 flex-col gap-4">
               <label className="block">
-                <span className="mb-1.5 block text-xs font-medium text-ink-soft">Product photos (up to 4)</span>
+                <span className="mb-1.5 block text-xs font-medium text-ink-soft">{t.admin.productForm.photosLabel}</span>
                 <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={selectImages} className="block w-full text-sm text-ink-soft file:mr-3 file:rounded-full file:border-0 file:bg-forest file:px-4 file:py-2 file:font-medium file:text-cream hover:file:bg-forest-dark" />
-                <span className="mt-1.5 block text-xs text-ink-soft">JPG, PNG, or WebP; maximum 5 MB each.</span>
+                <span className="mt-1.5 block text-xs text-ink-soft">{t.admin.productForm.photosHint}</span>
               </label>
               {imagePreviews.length > 1 && (
                 <div className="flex flex-wrap gap-2">
-                  {imagePreviews.slice(1).map((preview, index) => <img key={preview} src={preview} alt={`Product photo ${index + 2}`} className="h-16 w-16 rounded-xl object-cover" />)}
+                  {imagePreviews.slice(1).map((preview, index) => <img key={preview} src={preview} alt={`${t.admin.productForm.photoAlt} ${index + 2}`} className="h-16 w-16 rounded-xl object-cover" />)}
                 </div>
               )}
               <div>
-                <span className="mb-1.5 block text-xs font-medium text-ink-soft">Shape</span>
+                <span className="mb-1.5 block text-xs font-medium text-ink-soft">{t.admin.productForm.shapeLabel}</span>
                 <div className="flex flex-wrap gap-2">
                   {SHAPES.map((s) => (
                     <button
@@ -380,24 +383,24 @@ export function AdminProductForm() {
                         shape === s ? "border-forest bg-forest text-cream" : "border-ink/15 text-ink-soft hover:border-ink/30"
                       }`}
                     >
-                      {s}
+                      {t.admin.productForm.shapes[s]}
                     </button>
                   ))}
                 </div>
               </div>
               <div>
-                <span className="mb-1.5 block text-xs font-medium text-ink-soft">Color</span>
+                <span className="mb-1.5 block text-xs font-medium text-ink-soft">{t.admin.productForm.colorLabel}</span>
                 <div className="flex flex-wrap gap-2">
-                  {TINTS.map((t) => (
+                  {TINTS.map((tintOption) => (
                     <button
-                      key={t}
+                      key={tintOption}
                       type="button"
-                      onClick={() => setTint(t)}
+                      onClick={() => setTint(tintOption)}
                       className={`rounded-full border px-3 py-1.5 text-xs font-medium capitalize transition ${
-                        tint === t ? "border-forest bg-forest text-cream" : "border-ink/15 text-ink-soft hover:border-ink/30"
+                        tint === tintOption ? "border-forest bg-forest text-cream" : "border-ink/15 text-ink-soft hover:border-ink/30"
                       }`}
                     >
-                      {t}
+                      {t.admin.productForm.tints[tintOption]}
                     </button>
                   ))}
                 </div>
@@ -407,9 +410,9 @@ export function AdminProductForm() {
         </section>
 
         <section className="rounded-3xl border border-line bg-white p-6">
-          <h2 className="mb-4 font-display text-lg text-ink">How to use &amp; ingredients</h2>
+          <h2 className="mb-4 font-display text-lg text-ink">{t.admin.productForm.usageSection}</h2>
           <label className="mb-4 block">
-            <span className="mb-1.5 block text-sm font-medium text-ink">How to use (one step per line)</span>
+            <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.howToUseLabel}</span>
             <textarea
               value={howToUse}
               onChange={(e) => setHowToUse(e.target.value)}
@@ -418,7 +421,7 @@ export function AdminProductForm() {
             />
           </label>
           <label>
-            <span className="mb-1.5 block text-sm font-medium text-ink">Ingredients (comma separated)</span>
+            <span className="mb-1.5 block text-sm font-medium text-ink">{t.admin.productForm.ingredientsLabel}</span>
             <textarea
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
@@ -436,10 +439,10 @@ export function AdminProductForm() {
 
         <div className="flex flex-wrap gap-3">
           <Button type="submit" variant="primary" size="lg" isLoading={isSaving}>
-            {isEditing ? "Save changes" : "Create product"}
+            {isEditing ? t.admin.productForm.saveChanges : t.admin.productForm.createProduct}
           </Button>
           <Button type="button" variant="outline" size="lg" onClick={() => navigate("/admin/products")}>
-            Cancel
+            {t.admin.productForm.cancel}
           </Button>
         </div>
       </form>

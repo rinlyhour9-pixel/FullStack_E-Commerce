@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { api } from "../../api/client";
 import { useOrders } from "../../context/OrdersContext";
 import { useProducts } from "../../context/ProductsContext";
+import { useLanguage } from "../../context/LanguageContext";
 import { StatCard } from "../../components/admin/StatCard";
 import { OrderStatusBadge } from "../../components/admin/OrderStatusBadge";
 import { EmptyState } from "../../components/ui/EmptyState";
@@ -13,9 +14,12 @@ import { BagIcon, ChartBarIcon, DollarIcon, GridIcon } from "../../components/ui
 export function AdminDashboard() {
   const { orders } = useOrders();
   const { products } = useProducts();
+  const { t, language } = useLanguage();
+  const km = language === "km";
   const [stats, setStats] = useState<{ revenue: number; orders: number; products: number; customers: number; averageTicket?: number; posSales?: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  useEffect(() => { void api.get<typeof stats extends infer T ? Exclude<T, null> : never>("/admin/stats").then(setStats).catch((e) => setError(e instanceof Error ? e.message : "Could not load dashboard")); }, []);
+  const [hasError, setHasError] = useState(false);
+  useEffect(() => { void api.get<typeof stats extends infer T ? Exclude<T, null> : never>("/admin/stats").then(setStats).catch((e) => { setHasError(true); setError(e instanceof Error ? e.message : null); }); }, []);
 
   const activeOrders = orders.filter((order) => order.status !== "cancelled");
   const totalRevenue = stats?.revenue ?? 0;
@@ -39,37 +43,37 @@ export function AdminDashboard() {
   const recentOrders = orders.slice(0, 5);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className={`flex flex-col gap-8 ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>
       <div>
-        <h1 className="font-display text-3xl text-ink">Dashboard</h1>
-        <p className="mt-1 text-sm text-ink-soft">Live activity from your store database.</p>
+        <h1 className="font-display text-3xl text-ink">{t.admin.dashboard.title}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t.admin.dashboard.subtitle}</p>
       </div>
-      {error && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
+      {hasError && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error ?? t.admin.dashboard.loadError}</p>}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Total revenue" value={formatPrice(totalRevenue)} icon={<DollarIcon className="h-5 w-5" />} />
-        <StatCard label="Transactions" value={String(stats?.orders ?? activeOrders.length)} icon={<BagIcon className="h-5 w-5" />} />
+        <StatCard label={t.admin.dashboard.statRevenue} value={formatPrice(totalRevenue)} icon={<DollarIcon className="h-5 w-5" />} />
+        <StatCard label={t.admin.dashboard.statTransactions} value={String(stats?.orders ?? activeOrders.length)} icon={<BagIcon className="h-5 w-5" />} />
         <StatCard
-          label="Avg. order value"
+          label={t.admin.dashboard.statAvgOrder}
           value={formatPrice(avgOrderValue)}
           icon={<ChartBarIcon className="h-5 w-5" />}
         />
-        <StatCard label="Products listed" value={String(stats?.products ?? products.length)} icon={<GridIcon className="h-5 w-5" />} />
+        <StatCard label={t.admin.dashboard.statProducts} value={String(stats?.products ?? products.length)} icon={<GridIcon className="h-5 w-5" />} />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="rounded-3xl border border-line bg-white p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-display text-lg text-ink">Recent orders</h2>
+            <h2 className="font-display text-lg text-ink">{t.admin.dashboard.recentOrders}</h2>
             <Link to="/admin/orders" className="text-xs font-semibold uppercase tracking-wide text-clay-dark hover:text-clay">
-              View all
+              {t.admin.dashboard.viewAll}
             </Link>
           </div>
           {recentOrders.length === 0 ? (
             <EmptyState
               icon={<BagIcon className="h-6 w-6" />}
-              title="No orders yet"
-              description="Demo orders placed at checkout will show up here."
+              title={t.admin.dashboard.noOrdersTitle}
+              description={t.admin.dashboard.noOrdersDesc}
             />
           ) : (
             <ul className="flex flex-col divide-y divide-line">
@@ -88,19 +92,19 @@ export function AdminDashboard() {
         </section>
 
         <section className="rounded-3xl border border-line bg-white p-6">
-          <h2 className="mb-4 font-display text-lg text-ink">Top products</h2>
+          <h2 className="mb-4 font-display text-lg text-ink">{t.admin.dashboard.topProducts}</h2>
           {topProducts.length === 0 ? (
             <EmptyState
               icon={<ChartBarIcon className="h-6 w-6" />}
-              title="No sales yet"
-              description="Your bestsellers will appear here once orders come in."
+              title={t.admin.dashboard.noSalesTitle}
+              description={t.admin.dashboard.noSalesDesc}
             />
           ) : (
             <ul className="flex flex-col divide-y divide-line">
               {topProducts.map((entry) => (
                 <li key={entry.name} className="flex items-center justify-between gap-3 py-3 text-sm">
                   <span className="truncate font-medium text-ink">{entry.name}</span>
-                  <span className="shrink-0 text-ink-soft">{entry.quantity} sold</span>
+                  <span className="shrink-0 text-ink-soft">{entry.quantity} {t.admin.dashboard.soldSuffix}</span>
                   <span className="shrink-0 font-semibold text-ink">{formatPrice(entry.revenue)}</span>
                 </li>
               ))}
@@ -110,9 +114,9 @@ export function AdminDashboard() {
       </div>
 
       <section className="rounded-3xl border border-line bg-white p-6">
-        <h2 className="mb-4 font-display text-lg text-ink">Low stock</h2>
+        <h2 className="mb-4 font-display text-lg text-ink">{t.admin.dashboard.lowStock}</h2>
         {lowStockProducts.length === 0 ? (
-          <p className="text-sm text-ink-soft">All products are well stocked.</p>
+          <p className="text-sm text-ink-soft">{t.admin.dashboard.allStocked}</p>
         ) : (
           <ul className="flex flex-col divide-y divide-line">
             {lowStockProducts.map((product) => (
@@ -121,7 +125,7 @@ export function AdminDashboard() {
                   {product.name}
                 </Link>
                 <span className="shrink-0 rounded-full bg-clay/10 px-2.5 py-1 text-xs font-semibold text-clay-dark">
-                  {getTotalStock(product)} left
+                  {getTotalStock(product)} {t.admin.dashboard.leftSuffix}
                 </span>
               </li>
             ))}

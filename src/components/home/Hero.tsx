@@ -27,7 +27,7 @@ export function Hero() {
             }`}
           >
             {t.home.heroTitleStart}
-            <span className="italic text-clay">{t.home.heroTitleItalic}</span>
+            <span className={`${language === "km" ? "not-italic" : "italic"} text-clay`}>{t.home.heroTitleItalic}</span>
             {t.home.heroTitleEnd}
           </h1>
           <p className="mt-5 max-w-md text-base leading-relaxed text-ink-soft sm:text-lg">{t.home.heroDescription}</p>

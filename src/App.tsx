@@ -29,6 +29,7 @@ import { AdminCustomers } from "./pages/admin/Customers";
 import { AdminPos } from "./pages/admin/Pos";
 import { AdminInventory } from "./pages/admin/Inventory";
 import { AdminSales } from "./pages/admin/Sales";
+import { AdminReports } from "./pages/admin/Reports";
 import { RoutineFinder } from "./pages/RoutineFinder";
 import { StoreInformation } from "./pages/StoreInformation";
 
@@ -67,6 +68,7 @@ export default function App() {
                           <Route path="pos" element={<AdminPos />} />
                           <Route path="inventory" element={<AdminInventory />} />
                           <Route path="sales" element={<AdminSales />} />
+                          <Route path="reports" element={<AdminReports />} />
                           <Route path="products" element={<AdminProducts />} />
                           <Route path="products/new" element={<AdminProductForm />} />
                           <Route path="products/:id/edit" element={<AdminProductForm />} />

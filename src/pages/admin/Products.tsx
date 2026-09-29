@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProducts } from "../../context/ProductsContext";
 import { useToast } from "../../context/ToastContext";
+import { useLanguage } from "../../context/LanguageContext";
 import { categoryLabels } from "../../data/products";
 import { Button } from "../../components/ui/Button";
 import { EmptyState } from "../../components/ui/EmptyState";
@@ -12,6 +13,8 @@ import { EditIcon, GridIcon, PlusIcon, SearchIcon, TrashIcon } from "../../compo
 export function AdminProducts() {
   const { products, deleteProduct, isLoading, error } = useProducts();
   const { showToast } = useToast();
+  const { t, language } = useLanguage();
+  const km = language === "km";
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
@@ -24,19 +27,19 @@ export function AdminProducts() {
   }, [products, query]);
 
   const handleDelete = async (id: string, name: string) => {
-    try { await deleteProduct(id); setPendingDeleteId(null); showToast(`${name} was removed from the catalog.`, "info"); }
-    catch (e) { showToast(e instanceof Error ? e.message : "Product could not be removed.", "error"); }
+    try { await deleteProduct(id); setPendingDeleteId(null); showToast(`${name} ${t.admin.products.removedToastSuffix}`, "info"); }
+    catch (e) { showToast(e instanceof Error ? e.message : t.admin.products.removeError, "error"); }
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className={`flex flex-col gap-6 ${km ? "font-khmer" : ""}`} lang={km ? "km" : undefined}>
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-display text-3xl text-ink">Products</h1>
-          <p className="mt-1 text-sm text-ink-soft">{products.length} products in your catalog</p>
+          <h1 className="font-display text-3xl text-ink">{t.admin.products.title}</h1>
+          <p className="mt-1 text-sm text-ink-soft">{products.length} {t.admin.products.countSuffix}</p>
         </div>
         <Button to="/admin/products/new" icon={<PlusIcon className="h-4 w-4" />}>
-          Add product
+          {t.admin.products.addProduct}
         </Button>
       </div>
       {error && <p role="alert" className="rounded-xl bg-clay/10 px-4 py-3 text-sm text-clay-dark">{error}</p>}
@@ -47,20 +50,20 @@ export function AdminProducts() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search products…"
-          aria-label="Search products"
+          placeholder={t.admin.products.searchPlaceholder}
+          aria-label={t.admin.products.searchAriaLabel}
           className="w-full rounded-full border border-ink/15 bg-white py-2.5 pl-9 pr-4 text-sm text-ink placeholder:text-ink-soft/60 focus:border-forest focus:outline-none"
         />
       </div>
 
-      {isLoading ? <p className="py-8 text-sm text-ink-soft" role="status">Loading products…</p> : filtered.length === 0 ? (
+      {isLoading ? <p className="py-8 text-sm text-ink-soft" role="status">{t.admin.products.loading}</p> : filtered.length === 0 ? (
         <EmptyState
           icon={<GridIcon className="h-6 w-6" />}
-          title="No products found"
-          description="Try a different search, or add a new product to your catalog."
+          title={t.admin.products.emptyTitle}
+          description={t.admin.products.emptyDesc}
           action={
             <Button to="/admin/products/new" variant="secondary">
-              Add product
+              {t.admin.products.addProduct}
             </Button>
           }
         />
@@ -69,11 +72,11 @@ export function AdminProducts() {
           <table className="w-full min-w-180 text-left text-sm">
             <thead>
               <tr className="border-b border-line text-xs font-semibold uppercase tracking-wide text-ink-soft">
-                <th className="px-5 py-3 font-semibold">Product</th>
-                <th className="px-5 py-3 font-semibold">Category</th>
-                <th className="px-5 py-3 font-semibold">Price</th>
-                <th className="px-5 py-3 font-semibold">Stock</th>
-                <th className="px-5 py-3 font-semibold text-right">Actions</th>
+                <th className="px-5 py-3 font-semibold">{t.admin.products.colProduct}</th>
+                <th className="px-5 py-3 font-semibold">{t.admin.products.colCategory}</th>
+                <th className="px-5 py-3 font-semibold">{t.admin.products.colPrice}</th>
+                <th className="px-5 py-3 font-semibold">{t.admin.products.colStock}</th>
+                <th className="px-5 py-3 font-semibold text-right">{t.admin.products.colActions}</th>
               </tr>
             </thead>
             <tbody>
@@ -98,7 +101,7 @@ export function AdminProducts() {
                               : "bg-sage-light text-forest-dark"
                         }`}
                       >
-                        {stock === 0 ? "Out of stock" : `${stock} in stock`}
+                        {stock === 0 ? t.admin.products.outOfStock : `${stock} ${t.admin.products.inStockSuffix}`}
                       </span>
                     </td>
                     <td className="px-5 py-3">
@@ -106,7 +109,7 @@ export function AdminProducts() {
                         <Link
                           to={`/admin/products/${product.id}/edit`}
                           className="flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition hover:bg-ink/5 hover:text-ink"
-                          aria-label={`Edit ${product.name}`}
+                          aria-label={`${t.admin.products.editAriaPrefix} ${product.name}`}
                         >
                           <EditIcon className="h-4 w-4" />
                         </Link>
@@ -116,14 +119,14 @@ export function AdminProducts() {
                             onClick={() => handleDelete(product.id, product.name)}
                             className="rounded-full bg-clay px-3 py-1.5 text-xs font-semibold text-cream transition hover:bg-clay-dark"
                           >
-                            Confirm
+                            {t.admin.common.confirm}
                           </button>
                         ) : (
                           <button
                             type="button"
                             onClick={() => setPendingDeleteId(product.id)}
                             className="flex h-8 w-8 items-center justify-center rounded-full text-ink-soft transition hover:bg-clay/10 hover:text-clay-dark"
-                            aria-label={`Delete ${product.name}`}
+                            aria-label={`${t.admin.products.deleteAriaPrefix} ${product.name}`}
                           >
                             <TrashIcon className="h-4 w-4" />
                           </button>

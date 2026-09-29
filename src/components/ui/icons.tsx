@@ -255,3 +255,29 @@ export function BoxIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function ReportIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" />
+      <path d="M14 3v5h5M9.5 17v-3M12.5 17v-5M15.5 17v-2" />
+    </svg>
+  );
+}
+
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14" />
+    </svg>
+  );
+}
+
+export function PrinterIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2" />
+      <path d="M7 14h10v6H7z" />
+    </svg>
+  );
+}

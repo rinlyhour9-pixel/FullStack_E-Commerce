@@ -332,6 +332,368 @@ export interface Translations {
     copyright: string;
     demoNotice: string;
   };
+  admin: {
+    common: {
+      edit: string;
+      delete: string;
+      cancel: string;
+      save: string;
+      confirm: string;
+      adjust: string;
+      refresh: string;
+      loading: string;
+      dash: string;
+      checkingSession: string;
+      orderStatus: {
+        pending: string;
+        processing: string;
+        shipped: string;
+        delivered: string;
+        cancelled: string;
+      };
+      paymentMethods: {
+        cash: string;
+        card: string;
+        qr: string;
+      };
+    };
+    nav: {
+      ariaLabel: string;
+      dashboard: string;
+      pos: string;
+      products: string;
+      inventory: string;
+      sales: string;
+      reports: string;
+      orders: string;
+      customers: string;
+      sellerBadge: string;
+      viewStore: string;
+      signOutAria: string;
+      openMenuAria: string;
+      closeMenuAria: string;
+      header: string;
+    };
+    login: {
+      title: string;
+      subtitle: string;
+      emailLabel: string;
+      passwordLabel: string;
+      submit: string;
+      storePrompt: string;
+      storeLink: string;
+    };
+    dashboard: {
+      title: string;
+      subtitle: string;
+      loadError: string;
+      statRevenue: string;
+      statTransactions: string;
+      statAvgOrder: string;
+      statProducts: string;
+      recentOrders: string;
+      viewAll: string;
+      noOrdersTitle: string;
+      noOrdersDesc: string;
+      topProducts: string;
+      soldSuffix: string;
+      noSalesTitle: string;
+      noSalesDesc: string;
+      lowStock: string;
+      allStocked: string;
+      leftSuffix: string;
+    };
+    products: {
+      title: string;
+      countSuffix: string;
+      addProduct: string;
+      removeError: string;
+      removedToastSuffix: string;
+      searchPlaceholder: string;
+      searchAriaLabel: string;
+      loading: string;
+      emptyTitle: string;
+      emptyDesc: string;
+      colProduct: string;
+      colCategory: string;
+      colPrice: string;
+      colStock: string;
+      colActions: string;
+      outOfStock: string;
+      inStockSuffix: string;
+      editAriaPrefix: string;
+      deleteAriaPrefix: string;
+    };
+    productForm: {
+      editTitle: string;
+      addTitle: string;
+      editSubtitle: string;
+      addSubtitle: string;
+      errorTooManyPhotos: string;
+      errorPhotoType: string;
+      errorPhotoSize: string;
+      errorNameRequired: string;
+      errorTaglineRequired: string;
+      errorPriceInvalid: string;
+      errorVariantLabel: string;
+      errorSkinType: string;
+      errorSaveFailed: string;
+      notFoundToast: string;
+      updatedToastSuffix: string;
+      createdToastSuffix: string;
+      detailsSection: string;
+      productName: string;
+      tagline: string;
+      description: string;
+      category: string;
+      badges: string;
+      skinTypes: string;
+      pricingSection: string;
+      basePrice: string;
+      compareAtPrice: string;
+      variantsSection: string;
+      addVariant: string;
+      sizeLabel: string;
+      sizePlaceholder: string;
+      priceAddOn: string;
+      stock: string;
+      removeVariantAria: string;
+      packagingSection: string;
+      packagingHint: string;
+      photoPreviewAlt: string;
+      previewLabel: string;
+      photosLabel: string;
+      photosHint: string;
+      photoAlt: string;
+      shapeLabel: string;
+      colorLabel: string;
+      usageSection: string;
+      howToUseLabel: string;
+      ingredientsLabel: string;
+      saveChanges: string;
+      createProduct: string;
+      cancel: string;
+      shapes: {
+        pump: string;
+        dropper: string;
+        jar: string;
+        tube: string;
+        spray: string;
+      };
+      tints: {
+        forest: string;
+        sage: string;
+        clay: string;
+        gold: string;
+        ink: string;
+      };
+    };
+    orders: {
+      title: string;
+      countSuffix: string;
+      all: string;
+      loading: string;
+      statusUpdateError: string;
+      emptyTitle: string;
+      emptyDesc: string;
+      item: string;
+      items: string;
+      statusLabel: string;
+    };
+    customers: {
+      title: string;
+      countSuffixSingular: string;
+      countSuffixPlural: string;
+      loadError: string;
+      loading: string;
+      emptyTitle: string;
+      emptyDesc: string;
+      colCustomer: string;
+      colOrders: string;
+      colTotalSpent: string;
+      colLastOrder: string;
+    };
+    pos: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      productsAvailable: string;
+      searchPlaceholder: string;
+      allCategories: string;
+      noMatch: string;
+      chooseSizeAriaPrefix: string;
+      addToSale: string;
+      outOfStock: string;
+      currentTicket: string;
+      inStoreSale: string;
+      itemsSuffix: string;
+      saleComplete: string;
+      startNextSale: string;
+      receiptNote: string;
+      ticketEmptyTitle: string;
+      ticketEmptyDesc: string;
+      decreaseAriaPrefix: string;
+      increaseAriaPrefix: string;
+      removeAriaPrefix: string;
+      customerNameLabel: string;
+      customerNamePlaceholder: string;
+      subtotal: string;
+      taxLabel: string;
+      totalDue: string;
+      completingSale: string;
+      completeSale: string;
+      clearTicket: string;
+      saleError: string;
+      onlyAvailable: string;
+      cartAtStock: string;
+      printReceipt: string;
+      cashReceived: string;
+      cashReceivedPlaceholder: string;
+      exactAmount: string;
+      changeDue: string;
+      cashShort: string;
+      autoPrint: string;
+    };
+    inventory: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      addProduct: string;
+      activeProducts: string;
+      unitsOnHand: string;
+      lowStockItems: string;
+      showingLowStock: string;
+      clickToFilter: string;
+      searchPlaceholder: string;
+      lowStockOnly: string;
+      colProduct: string;
+      colVariant: string;
+      colUnitPrice: string;
+      colStockOnHand: string;
+      low: string;
+      available: string;
+      adjust: string;
+      save: string;
+      cancel: string;
+      stockAriaPrefix: string;
+      invalidStock: string;
+      updateError: string;
+      updateSuccess: string;
+      noItems: string;
+    };
+    sales: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      periodToday: string;
+      periodAll: string;
+      refresh: string;
+      receipts: string;
+      itemsSold: string;
+      grossSales: string;
+      colReceipt: string;
+      colCustomer: string;
+      colPayment: string;
+      colCashier: string;
+      colTotal: string;
+      walkIn: string;
+      loading: string;
+      empty: string;
+      loadError: string;
+      subtotal: string;
+      tax: string;
+      total: string;
+    };
+    receipt: {
+      title: string;
+      receiptNo: string;
+      date: string;
+      cashier: string;
+      customer: string;
+      walkIn: string;
+      payment: string;
+      itemsCount: string;
+      subtotal: string;
+      tax: string;
+      total: string;
+      cashReceived: string;
+      change: string;
+      thankYou: string;
+      policy: string;
+      reprint: string;
+      printError: string;
+    };
+    reports: {
+      eyebrow: string;
+      title: string;
+      subtitle: string;
+      periodDay: string;
+      periodMonth: string;
+      periodYear: string;
+      previous: string;
+      next: string;
+      current: string;
+      refresh: string;
+      exportCsv: string;
+      print: string;
+      loading: string;
+      loadError: string;
+      generated: string;
+      reportPeriod: string;
+      comparedWith: string;
+      vsPrevious: string;
+      noComparison: string;
+      kpiRevenue: string;
+      kpiTransactions: string;
+      kpiAvgTicket: string;
+      kpiItems: string;
+      kpiNewCustomers: string;
+      insightsTitle: string;
+      insightUp: string;
+      insightDown: string;
+      insightFlat: string;
+      insightNew: string;
+      insightPeak: string;
+      insightTopProduct: string;
+      insightChannel: string;
+      insightCancelled: string;
+      trendDay: string;
+      trendMonth: string;
+      trendYear: string;
+      online: string;
+      inStore: string;
+      peak: string;
+      viewTable: string;
+      viewChart: string;
+      channelTitle: string;
+      financialTitle: string;
+      grossRevenue: string;
+      netSales: string;
+      tax: string;
+      shipping: string;
+      cancelledOrders: string;
+      unitsPerTransaction: string;
+      paymentsTitle: string;
+      cashOnDelivery: string;
+      statusTitle: string;
+      topProductsTitle: string;
+      staffTitle: string;
+      colPeriod: string;
+      colProduct: string;
+      colUnits: string;
+      colRevenue: string;
+      colShare: string;
+      colCashier: string;
+      colSales: string;
+      colTotal: string;
+      colTransactions: string;
+      colChannelSplit: string;
+      emptyTitle: string;
+      emptyDesc: string;
+      emptySection: string;
+      hourSuffix: string;
+    };
+  };
 }
 
 export const en: Translations = {
@@ -684,6 +1046,368 @@ export const en: Translations = {
     copyright: "TAMJIT Shop. All rights reserved.",
     demoNotice: "Orders are processed as cash on delivery. Payment is collected when your order arrives.",
   },
+  admin: {
+    common: {
+      edit: "Edit",
+      delete: "Delete",
+      cancel: "Cancel",
+      save: "Save",
+      confirm: "Confirm",
+      adjust: "Adjust",
+      refresh: "Refresh",
+      loading: "Loading…",
+      dash: "—",
+      checkingSession: "Checking your seller session…",
+      orderStatus: {
+        pending: "Pending",
+        processing: "Processing",
+        shipped: "Shipped",
+        delivered: "Delivered",
+        cancelled: "Cancelled",
+      },
+      paymentMethods: {
+        cash: "Cash",
+        card: "Card",
+        qr: "QR transfer",
+      },
+    },
+    nav: {
+      ariaLabel: "Admin",
+      dashboard: "Dashboard",
+      pos: "Point of sale",
+      products: "Products",
+      inventory: "Inventory",
+      sales: "Sales",
+      reports: "Reports",
+      orders: "Orders",
+      customers: "Customers",
+      sellerBadge: "Seller",
+      viewStore: "View store",
+      signOutAria: "Sign out",
+      openMenuAria: "Open admin menu",
+      closeMenuAria: "Close menu",
+      header: "Seller Dashboard",
+    },
+    login: {
+      title: "Seller Sign In",
+      subtitle: "Sign in with the admin account created by the secure setup command.",
+      emailLabel: "Email address",
+      passwordLabel: "Password",
+      submit: "Sign in to dashboard",
+      storePrompt: "Looking for the storefront?",
+      storeLink: "Customer sign in",
+    },
+    dashboard: {
+      title: "Dashboard",
+      subtitle: "Live activity from your store database.",
+      loadError: "Could not load dashboard",
+      statRevenue: "Total revenue",
+      statTransactions: "Transactions",
+      statAvgOrder: "Avg. order value",
+      statProducts: "Products listed",
+      recentOrders: "Recent orders",
+      viewAll: "View all",
+      noOrdersTitle: "No orders yet",
+      noOrdersDesc: "Demo orders placed at checkout will show up here.",
+      topProducts: "Top products",
+      soldSuffix: "sold",
+      noSalesTitle: "No sales yet",
+      noSalesDesc: "Your bestsellers will appear here once orders come in.",
+      lowStock: "Low stock",
+      allStocked: "All products are well stocked.",
+      leftSuffix: "left",
+    },
+    products: {
+      title: "Products",
+      countSuffix: "products in your catalog",
+      addProduct: "Add product",
+      removeError: "Product could not be removed.",
+      removedToastSuffix: "was removed from the catalog.",
+      searchPlaceholder: "Search products…",
+      searchAriaLabel: "Search products",
+      loading: "Loading products…",
+      emptyTitle: "No products found",
+      emptyDesc: "Try a different search, or add a new product to your catalog.",
+      colProduct: "Product",
+      colCategory: "Category",
+      colPrice: "Price",
+      colStock: "Stock",
+      colActions: "Actions",
+      outOfStock: "Out of stock",
+      inStockSuffix: "in stock",
+      editAriaPrefix: "Edit",
+      deleteAriaPrefix: "Delete",
+    },
+    productForm: {
+      editTitle: "Edit product",
+      addTitle: "Add product",
+      editSubtitle: "Update details, pricing, and stock for this product.",
+      addSubtitle: "Create a new product for your storefront.",
+      errorTooManyPhotos: "Choose up to 4 product photos.",
+      errorPhotoType: "Photos must be JPG, PNG, or WebP files.",
+      errorPhotoSize: "Each photo must be 5 MB or smaller.",
+      errorNameRequired: "Product name is required.",
+      errorTaglineRequired: "Tagline is required.",
+      errorPriceInvalid: "Enter a valid price.",
+      errorVariantLabel: "Every variant needs a size label.",
+      errorSkinType: "Select at least one skin type.",
+      errorSaveFailed: "Product could not be saved.",
+      notFoundToast: "That product could not be found.",
+      updatedToastSuffix: "was updated.",
+      createdToastSuffix: "was added to your catalog.",
+      detailsSection: "Details",
+      productName: "Product name",
+      tagline: "Tagline",
+      description: "Description",
+      category: "Category",
+      badges: "Badges",
+      skinTypes: "Skin types",
+      pricingSection: "Pricing",
+      basePrice: "Base price (USD)",
+      compareAtPrice: "Compare-at price (optional)",
+      variantsSection: "Variants & stock",
+      addVariant: "Add variant",
+      sizeLabel: "Size label",
+      sizePlaceholder: "e.g. 50ml",
+      priceAddOn: "Price add-on",
+      stock: "Stock",
+      removeVariantAria: "Remove variant",
+      packagingSection: "Packaging image",
+      packagingHint: "Upload product photos, or use the generated packaging illustration.",
+      photoPreviewAlt: "Product photo preview",
+      previewLabel: "Preview",
+      photosLabel: "Product photos (up to 4)",
+      photosHint: "JPG, PNG, or WebP; maximum 5 MB each.",
+      photoAlt: "Product photo",
+      shapeLabel: "Shape",
+      colorLabel: "Color",
+      usageSection: "How to use & ingredients",
+      howToUseLabel: "How to use (one step per line)",
+      ingredientsLabel: "Ingredients (comma separated)",
+      saveChanges: "Save changes",
+      createProduct: "Create product",
+      cancel: "Cancel",
+      shapes: {
+        pump: "Pump",
+        dropper: "Dropper",
+        jar: "Jar",
+        tube: "Tube",
+        spray: "Spray",
+      },
+      tints: {
+        forest: "Forest",
+        sage: "Sage",
+        clay: "Clay",
+        gold: "Gold",
+        ink: "Ink",
+      },
+    },
+    orders: {
+      title: "Orders",
+      countSuffix: "total customer orders",
+      all: "All",
+      loading: "Loading orders…",
+      statusUpdateError: "Could not update order status",
+      emptyTitle: "No orders yet",
+      emptyDesc: "Customer orders will appear here when they check out.",
+      item: "item",
+      items: "items",
+      statusLabel: "Status",
+    },
+    customers: {
+      title: "Customers",
+      countSuffixSingular: "registered customer",
+      countSuffixPlural: "registered customers",
+      loadError: "Could not load customers",
+      loading: "Loading customers…",
+      emptyTitle: "No customers yet",
+      emptyDesc: "Registered customer accounts will appear here.",
+      colCustomer: "Customer",
+      colOrders: "Orders",
+      colTotalSpent: "Total spent",
+      colLastOrder: "Last order",
+    },
+    pos: {
+      eyebrow: "Retail operations",
+      title: "Point of sale",
+      subtitle: "Build a ticket, choose a tender, and complete the sale.",
+      productsAvailable: "Products available",
+      searchPlaceholder: "Search products",
+      allCategories: "All categories",
+      noMatch: "No products match your search.",
+      chooseSizeAriaPrefix: "Choose size for",
+      addToSale: "Add to sale",
+      outOfStock: "Out of stock",
+      currentTicket: "Current ticket",
+      inStoreSale: "In-store sale",
+      itemsSuffix: "items",
+      saleComplete: "Sale complete",
+      startNextSale: "Start next sale",
+      receiptNote: "You can reprint any receipt from the Sales page.",
+      ticketEmptyTitle: "Ticket is empty",
+      ticketEmptyDesc: "Add products to begin a sale.",
+      decreaseAriaPrefix: "Decrease",
+      increaseAriaPrefix: "Increase",
+      removeAriaPrefix: "Remove",
+      customerNameLabel: "Customer name (optional)",
+      customerNamePlaceholder: "Walk-in customer",
+      subtotal: "Subtotal",
+      taxLabel: "Tax ({pct}%)",
+      totalDue: "Total due",
+      completingSale: "Completing sale…",
+      completeSale: "Complete sale",
+      clearTicket: "Clear ticket",
+      saleError: "The sale could not be completed.",
+      onlyAvailable: "Only {count} available.",
+      cartAtStock: "The cart quantity is already at available stock.",
+      printReceipt: "Print receipt",
+      cashReceived: "Cash received",
+      cashReceivedPlaceholder: "Amount handed over",
+      exactAmount: "Exact",
+      changeDue: "Change due",
+      cashShort: "Cash received is less than the total due.",
+      autoPrint: "Print receipt automatically",
+    },
+    inventory: {
+      eyebrow: "Operations",
+      title: "Inventory",
+      subtitle: "Monitor availability and adjust on-hand units by variant.",
+      addProduct: "Add product",
+      activeProducts: "Active products",
+      unitsOnHand: "Units on hand",
+      lowStockItems: "Low stock items",
+      showingLowStock: "Showing low stock",
+      clickToFilter: "Click to filter",
+      searchPlaceholder: "Search product or category",
+      lowStockOnly: "Low stock only",
+      colProduct: "Product",
+      colVariant: "Variant",
+      colUnitPrice: "Unit price",
+      colStockOnHand: "Stock on hand",
+      low: "low",
+      available: "available",
+      adjust: "Adjust",
+      save: "Save",
+      cancel: "Cancel",
+      stockAriaPrefix: "Stock for",
+      invalidStock: "Enter a whole number of zero or more.",
+      updateError: "Stock could not be updated.",
+      updateSuccess: "Stock level updated.",
+      noItems: "No inventory items match this view.",
+    },
+    sales: {
+      eyebrow: "Manager view",
+      title: "Sales",
+      subtitle: "In-store receipts and payment summaries.",
+      periodToday: "Today",
+      periodAll: "Last 200 sales",
+      refresh: "Refresh",
+      receipts: "Receipts",
+      itemsSold: "Items sold",
+      grossSales: "Gross sales",
+      colReceipt: "Receipt",
+      colCustomer: "Customer",
+      colPayment: "Payment",
+      colCashier: "Cashier",
+      colTotal: "Total",
+      walkIn: "Walk-in",
+      loading: "Loading sales…",
+      empty: "No in-store sales for this period yet.",
+      loadError: "Sales could not be loaded.",
+      subtotal: "Subtotal",
+      tax: "Tax",
+      total: "Total",
+    },
+    receipt: {
+      title: "Sales receipt",
+      receiptNo: "Receipt",
+      date: "Date",
+      cashier: "Cashier",
+      customer: "Customer",
+      walkIn: "Walk-in",
+      payment: "Payment",
+      itemsCount: "Items",
+      subtotal: "Subtotal",
+      tax: "Tax ({pct}%)",
+      total: "Total",
+      cashReceived: "Cash received",
+      change: "Change",
+      thankYou: "Thank you for shopping with us!",
+      policy: "Unopened items may be exchanged within 7 days with this receipt.",
+      reprint: "Reprint",
+      printError: "The receipt could not be printed.",
+    },
+    reports: {
+      eyebrow: "Business intelligence",
+      title: "Reports",
+      subtitle: "Daily, monthly and yearly performance across online orders and in-store sales.",
+      periodDay: "Day",
+      periodMonth: "Month",
+      periodYear: "Year",
+      previous: "Previous period",
+      next: "Next period",
+      current: "Current",
+      refresh: "Refresh",
+      exportCsv: "Export CSV",
+      print: "Print / PDF",
+      loading: "Building report…",
+      loadError: "The report could not be loaded.",
+      generated: "Generated",
+      reportPeriod: "Report period",
+      comparedWith: "Compared with",
+      vsPrevious: "vs previous",
+      noComparison: "No prior data",
+      kpiRevenue: "Total revenue",
+      kpiTransactions: "Transactions",
+      kpiAvgTicket: "Average ticket",
+      kpiItems: "Units sold",
+      kpiNewCustomers: "New customers",
+      insightsTitle: "Key takeaways",
+      insightUp: "Revenue grew {pct} compared with the previous period.",
+      insightDown: "Revenue fell {pct} compared with the previous period.",
+      insightFlat: "Revenue is level with the previous period.",
+      insightNew: "First recorded sales — there was no revenue in the previous period.",
+      insightPeak: "Busiest {bucket} was {label}, bringing in {amount}.",
+      insightTopProduct: "Best seller: {name} with {units} units ({amount}).",
+      insightChannel: "{channel} generated {pct} of revenue.",
+      insightCancelled: "{count} cancelled online orders worth {amount} were excluded from revenue.",
+      trendDay: "Revenue by hour",
+      trendMonth: "Revenue by day",
+      trendYear: "Revenue by month",
+      online: "Online",
+      inStore: "In-store",
+      peak: "Peak",
+      viewTable: "Table",
+      viewChart: "Chart",
+      channelTitle: "Sales channels",
+      financialTitle: "Financial summary",
+      grossRevenue: "Gross revenue",
+      netSales: "Net sales (before tax & shipping)",
+      tax: "Tax collected",
+      shipping: "Shipping charged",
+      cancelledOrders: "Cancelled orders (excluded)",
+      unitsPerTransaction: "Units per transaction",
+      paymentsTitle: "Payment methods",
+      cashOnDelivery: "Cash on delivery",
+      statusTitle: "Online order status",
+      topProductsTitle: "Top products",
+      staffTitle: "Cashier performance",
+      colPeriod: "Period",
+      colProduct: "Product",
+      colUnits: "Units",
+      colRevenue: "Revenue",
+      colShare: "Share",
+      colCashier: "Cashier",
+      colSales: "Receipts",
+      colTotal: "Total",
+      colTransactions: "Transactions",
+      colChannelSplit: "Online / In-store",
+      emptyTitle: "No sales in this period",
+      emptyDesc: "Choose another date, or check back once orders and POS sales come in.",
+      emptySection: "No data for this period.",
+      hourSuffix: "hour",
+    },
+  },
 };
 
 export const km: Translations = {
@@ -1034,6 +1758,368 @@ export const km: Translations = {
     join: "ចុះឈ្មោះ",
     copyright: "ហាង TAMJIT។ រក្សាសិទ្ធិគ្រប់យ៉ាង។",
     demoNotice: "នេះជាហាងគំរូ។ គ្មានការកុម្ម៉ង់ ឬការទូទាត់ប្រាក់ពិតប្រាកដត្រូវបានដំណើរការទេ។",
+  },
+  admin: {
+    common: {
+      edit: "កែសម្រួល",
+      delete: "លុប",
+      cancel: "បោះបង់",
+      save: "រក្សាទុក",
+      confirm: "បញ្ជាក់",
+      adjust: "កែសម្រួលចំនួន",
+      refresh: "ផ្ទុកឡើងវិញ",
+      loading: "កំពុងផ្ទុក…",
+      dash: "—",
+      checkingSession: "កំពុងពិនិត្យមើលសម័យចូលរបស់អ្នកលក់…",
+      orderStatus: {
+        pending: "កំពុងរង់ចាំ",
+        processing: "កំពុងដំណើរការ",
+        shipped: "បានដឹកជញ្ជូន",
+        delivered: "បានប្រគល់ជូន",
+        cancelled: "បានលុបចោល",
+      },
+      paymentMethods: {
+        cash: "សាច់ប្រាក់",
+        card: "កាត",
+        qr: "ផ្ទេរ QR",
+      },
+    },
+    nav: {
+      ariaLabel: "អ្នកគ្រប់គ្រង",
+      dashboard: "ផ្ទាំងគ្រប់គ្រង",
+      pos: "កន្លែងលក់",
+      products: "ផលិតផល",
+      inventory: "ស្តុកទំនិញ",
+      sales: "ការលក់",
+      reports: "របាយការណ៍",
+      orders: "ការកុម្ម៉ង់",
+      customers: "អតិថិជន",
+      sellerBadge: "អ្នកលក់",
+      viewStore: "មើលហាង",
+      signOutAria: "ចាកចេញ",
+      openMenuAria: "បើកម៉ឺនុយអ្នកគ្រប់គ្រង",
+      closeMenuAria: "បិទម៉ឺនុយ",
+      header: "ផ្ទាំងគ្រប់គ្រងអ្នកលក់",
+    },
+    login: {
+      title: "ចូលគណនីអ្នកលក់",
+      subtitle: "ចូលគណនីជាមួយគណនីអ្នកគ្រប់គ្រងដែលបានបង្កើតដោយពាក្យបញ្ជាដំឡើងសុវត្ថិភាព។",
+      emailLabel: "អាសយដ្ឋានអ៊ីមែល",
+      passwordLabel: "ពាក្យសម្ងាត់",
+      submit: "ចូលទៅផ្ទាំងគ្រប់គ្រង",
+      storePrompt: "កំពុងស្វែងរកហាងលក់ទំនិញ?",
+      storeLink: "ចូលគណនីអតិថិជន",
+    },
+    dashboard: {
+      title: "ផ្ទាំងគ្រប់គ្រង",
+      subtitle: "សកម្មភាពផ្ទាល់ពីមូលដ្ឋានទិន្នន័យហាងរបស់អ្នក។",
+      loadError: "មិនអាចផ្ទុកផ្ទាំងគ្រប់គ្រងបានទេ",
+      statRevenue: "ចំណូលសរុប",
+      statTransactions: "ប្រតិបត្តិការ",
+      statAvgOrder: "តម្លៃការកុម្ម៉ង់ជាមធ្យម",
+      statProducts: "ផលិតផលបានចុះបញ្ជី",
+      recentOrders: "ការកុម្ម៉ង់ថ្មីៗ",
+      viewAll: "មើលទាំងអស់",
+      noOrdersTitle: "មិនទាន់មានការកុម្ម៉ង់ទេ",
+      noOrdersDesc: "ការកុម្ម៉ង់គំរូដែលបានធ្វើនៅពេលទូទាត់នឹងបង្ហាញនៅទីនេះ។",
+      topProducts: "ផលិតផលលក់ដាច់បំផុត",
+      soldSuffix: "បានលក់",
+      noSalesTitle: "មិនទាន់មានការលក់ទេ",
+      noSalesDesc: "ផលិតផលលក់ដាច់របស់អ្នកនឹងបង្ហាញនៅទីនេះ នៅពេលមានការកុម្ម៉ង់ចូលមក។",
+      lowStock: "ស្តុកទាប",
+      allStocked: "ផលិតផលទាំងអស់មានស្តុកគ្រប់គ្រាន់។",
+      leftSuffix: "នៅសល់",
+    },
+    products: {
+      title: "ផលិតផល",
+      countSuffix: "ផលិតផលនៅក្នុងកាតាឡុករបស់អ្នក",
+      addProduct: "បន្ថែមផលិតផល",
+      removeError: "មិនអាចលុបផលិតផលនេះបានទេ។",
+      removedToastSuffix: "ត្រូវបានលុបចេញពីកាតាឡុក។",
+      searchPlaceholder: "ស្វែងរកផលិតផល…",
+      searchAriaLabel: "ស្វែងរកផលិតផល",
+      loading: "កំពុងផ្ទុកផលិតផល…",
+      emptyTitle: "រកមិនឃើញផលិតផលទេ",
+      emptyDesc: "សូមសាកល្បងស្វែងរកម្តងទៀត ឬបន្ថែមផលិតផលថ្មីទៅកាតាឡុករបស់អ្នក។",
+      colProduct: "ផលិតផល",
+      colCategory: "ប្រភេទ",
+      colPrice: "តម្លៃ",
+      colStock: "ស្តុក",
+      colActions: "សកម្មភាព",
+      outOfStock: "អស់ស្តុក",
+      inStockSuffix: "នៅសល់ក្នុងស្តុក",
+      editAriaPrefix: "កែសម្រួល",
+      deleteAriaPrefix: "លុប",
+    },
+    productForm: {
+      editTitle: "កែសម្រួលផលិតផល",
+      addTitle: "បន្ថែមផលិតផល",
+      editSubtitle: "ធ្វើបច្ចុប្បន្នភាពព័ត៌មានលម្អិត តម្លៃ និងស្តុកសម្រាប់ផលិតផលនេះ។",
+      addSubtitle: "បង្កើតផលិតផលថ្មីសម្រាប់ហាងរបស់អ្នក។",
+      errorTooManyPhotos: "សូមជ្រើសរើសរូបភាពផលិតផលមិនលើសពី ៤ សន្លឹក។",
+      errorPhotoType: "រូបភាពត្រូវតែជាឯកសារ JPG, PNG ឬ WebP។",
+      errorPhotoSize: "រូបភាពនីមួយៗត្រូវតែមានទំហំ ៥ MB ឬតិចជាងនេះ។",
+      errorNameRequired: "ត្រូវការឈ្មោះផលិតផល។",
+      errorTaglineRequired: "ត្រូវការចំណងជើងរង។",
+      errorPriceInvalid: "សូមបញ្ចូលតម្លៃដែលត្រឹមត្រូវ។",
+      errorVariantLabel: "រាល់ជម្រើសទាំងអស់ត្រូវការស្លាកទំហំ។",
+      errorSkinType: "សូមជ្រើសរើសប្រភេទស្បែកយ៉ាងតិចមួយ។",
+      errorSaveFailed: "មិនអាចរក្សាទុកផលិតផលបានទេ។",
+      notFoundToast: "រកមិនឃើញផលិតផលនោះទេ។",
+      updatedToastSuffix: "ត្រូវបានធ្វើបច្ចុប្បន្នភាព។",
+      createdToastSuffix: "ត្រូវបានបន្ថែមទៅកាតាឡុករបស់អ្នក។",
+      detailsSection: "ព័ត៌មានលម្អិត",
+      productName: "ឈ្មោះផលិតផល",
+      tagline: "ចំណងជើងរង",
+      description: "ការពិពណ៌នា",
+      category: "ប្រភេទ",
+      badges: "ស្លាកសម្គាល់",
+      skinTypes: "ប្រភេទស្បែក",
+      pricingSection: "តម្លៃ",
+      basePrice: "តម្លៃមូលដ្ឋាន (USD)",
+      compareAtPrice: "តម្លៃប្រៀបធៀប (មិនចាំបាច់)",
+      variantsSection: "ជម្រើស និងស្តុក",
+      addVariant: "បន្ថែមជម្រើស",
+      sizeLabel: "ស្លាកទំហំ",
+      sizePlaceholder: "ឧ. 50ml",
+      priceAddOn: "តម្លៃបន្ថែម",
+      stock: "ស្តុក",
+      removeVariantAria: "លុបជម្រើស",
+      packagingSection: "រូបភាពវេចខ្ចប់",
+      packagingHint: "បញ្ចូលរូបភាពផលិតផល ឬប្រើរូបភាពវេចខ្ចប់ដែលបានបង្កើតដោយស្វ័យប្រវត្តិ។",
+      photoPreviewAlt: "ការមើលរូបភាពផលិតផលជាមុន",
+      previewLabel: "ការមើលជាមុន",
+      photosLabel: "រូបភាពផលិតផល (មិនលើសពី ៤ សន្លឹក)",
+      photosHint: "JPG, PNG ឬ WebP; អតិបរមា ៥ MB ក្នុងមួយសន្លឹក។",
+      photoAlt: "រូបភាពផលិតផល",
+      shapeLabel: "រាង",
+      colorLabel: "ពណ៌",
+      usageSection: "របៀបប្រើ និងសារធាតុផ្សំ",
+      howToUseLabel: "របៀបប្រើ (មួយជំហានក្នុងមួយបន្ទាត់)",
+      ingredientsLabel: "សារធាតុផ្សំ (ខណ្ឌដោយសញ្ញាក្បៀស)",
+      saveChanges: "រក្សាទុកការផ្លាស់ប្តូរ",
+      createProduct: "បង្កើតផលិតផល",
+      cancel: "បោះបង់",
+      shapes: {
+        pump: "ស្នប់",
+        dropper: "ដំណក់",
+        jar: "ពាង",
+        tube: "បំពង់",
+        spray: "បាញ់",
+      },
+      tints: {
+        forest: "បៃតងព្រៃ",
+        sage: "បៃតងស្លឹកឈើ",
+        clay: "ដីឥដ្ឋ",
+        gold: "មាស",
+        ink: "ខ្មៅ",
+      },
+    },
+    orders: {
+      title: "ការកុម្ម៉ង់",
+      countSuffix: "ការកុម្ម៉ង់អតិថិជនសរុប",
+      all: "ទាំងអស់",
+      loading: "កំពុងផ្ទុកការកុម្ម៉ង់…",
+      statusUpdateError: "មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពការកុម្ម៉ង់បានទេ",
+      emptyTitle: "មិនទាន់មានការកុម្ម៉ង់ទេ",
+      emptyDesc: "ការកុម្ម៉ង់អតិថិជននឹងបង្ហាញនៅទីនេះ នៅពេលពួកគេទូទាត់ប្រាក់។",
+      item: "មុខទំនិញ",
+      items: "មុខទំនិញ",
+      statusLabel: "ស្ថានភាព",
+    },
+    customers: {
+      title: "អតិថិជន",
+      countSuffixSingular: "អតិថិជនបានចុះឈ្មោះ",
+      countSuffixPlural: "អតិថិជនបានចុះឈ្មោះ",
+      loadError: "មិនអាចផ្ទុកអតិថិជនបានទេ",
+      loading: "កំពុងផ្ទុកអតិថិជន…",
+      emptyTitle: "មិនទាន់មានអតិថិជនទេ",
+      emptyDesc: "គណនីអតិថិជនដែលបានចុះឈ្មោះនឹងបង្ហាញនៅទីនេះ។",
+      colCustomer: "អតិថិជន",
+      colOrders: "ការកុម្ម៉ង់",
+      colTotalSpent: "ចំណាយសរុប",
+      colLastOrder: "ការកុម្ម៉ង់ចុងក្រោយ",
+    },
+    pos: {
+      eyebrow: "ប្រតិបត្តិការលក់រាយ",
+      title: "កន្លែងលក់",
+      subtitle: "បង្កើតវិក្កយបត្រ ជ្រើសរើសរបៀបទូទាត់ ហើយបញ្ចប់ការលក់។",
+      productsAvailable: "ផលិតផលមាន",
+      searchPlaceholder: "ស្វែងរកផលិតផល",
+      allCategories: "ប្រភេទទាំងអស់",
+      noMatch: "គ្មានផលិតផលត្រូវនឹងការស្វែងរករបស់អ្នកទេ។",
+      chooseSizeAriaPrefix: "ជ្រើសរើសទំហំសម្រាប់",
+      addToSale: "បន្ថែមទៅការលក់",
+      outOfStock: "អស់ស្តុក",
+      currentTicket: "វិក្កយបត្របច្ចុប្បន្ន",
+      inStoreSale: "ការលក់នៅហាង",
+      itemsSuffix: "មុខទំនិញ",
+      saleComplete: "ការលក់បានបញ្ចប់",
+      startNextSale: "ចាប់ផ្តើមការលក់បន្ទាប់",
+      receiptNote: "អ្នកអាចបោះពុម្ពវិក្កយបត្រឡើងវិញពីទំព័រការលក់។",
+      ticketEmptyTitle: "វិក្កយបត្រទទេ",
+      ticketEmptyDesc: "បន្ថែមផលិតផលដើម្បីចាប់ផ្តើមការលក់។",
+      decreaseAriaPrefix: "បន្ថយ",
+      increaseAriaPrefix: "បង្កើន",
+      removeAriaPrefix: "លុប",
+      customerNameLabel: "ឈ្មោះអតិថិជន (មិនចាំបាច់)",
+      customerNamePlaceholder: "អតិថិជនចូលមកផ្ទាល់",
+      subtotal: "សរុបរង",
+      taxLabel: "ពន្ធ ({pct}%)",
+      totalDue: "សរុបត្រូវទូទាត់",
+      completingSale: "កំពុងបញ្ចប់ការលក់…",
+      completeSale: "បញ្ចប់ការលក់",
+      clearTicket: "សម្អាតវិក្កយបត្រ",
+      saleError: "មិនអាចបញ្ចប់ការលក់នេះបានទេ។",
+      onlyAvailable: "មានតែ {count} ប៉ុណ្ណោះ។",
+      cartAtStock: "ចំនួននៅក្នុងកន្ត្រកបានដល់កម្រិតស្តុកដែលមានហើយ។",
+      printReceipt: "បោះពុម្ពវិក្កយបត្រ",
+      cashReceived: "ប្រាក់ទទួលបាន",
+      cashReceivedPlaceholder: "ចំនួនប្រាក់ដែលអតិថិជនឲ្យ",
+      exactAmount: "គ្រប់ចំនួន",
+      changeDue: "ប្រាក់អាប់",
+      cashShort: "ប្រាក់ទទួលបានតិចជាងចំនួនត្រូវបង់។",
+      autoPrint: "បោះពុម្ពវិក្កយបត្រដោយស្វ័យប្រវត្តិ",
+    },
+    inventory: {
+      eyebrow: "ប្រតិបត្តិការ",
+      title: "ស្តុកទំនិញ",
+      subtitle: "តាមដានភាពមានស្តុក និងកែសម្រួលចំនួនតាមជម្រើសនីមួយៗ។",
+      addProduct: "បន្ថែមផលិតផល",
+      activeProducts: "ផលិតផលសកម្ម",
+      unitsOnHand: "ចំនួននៅសល់",
+      lowStockItems: "ទំនិញស្តុកទាប",
+      showingLowStock: "កំពុងបង្ហាញស្តុកទាប",
+      clickToFilter: "ចុចដើម្បីត្រង",
+      searchPlaceholder: "ស្វែងរកផលិតផល ឬប្រភេទ",
+      lowStockOnly: "តែស្តុកទាបប៉ុណ្ណោះ",
+      colProduct: "ផលិតផល",
+      colVariant: "ជម្រើស",
+      colUnitPrice: "តម្លៃឯកតា",
+      colStockOnHand: "ស្តុកនៅសល់",
+      low: "ទាប",
+      available: "នៅសល់",
+      adjust: "កែសម្រួល",
+      save: "រក្សាទុក",
+      cancel: "បោះបង់",
+      stockAriaPrefix: "ស្តុកសម្រាប់",
+      invalidStock: "សូមបញ្ចូលលេខគត់ចាប់ពីសូន្យឡើងទៅ។",
+      updateError: "មិនអាចធ្វើបច្ចុប្បន្នភាពស្តុកបានទេ។",
+      updateSuccess: "កម្រិតស្តុកត្រូវបានធ្វើបច្ចុប្បន្នភាព។",
+      noItems: "គ្មានទំនិញត្រូវនឹងទិដ្ឋភាពនេះទេ។",
+    },
+    sales: {
+      eyebrow: "ទិដ្ឋភាពអ្នកគ្រប់គ្រង",
+      title: "ការលក់",
+      subtitle: "វិក្កយបត្រនៅហាង និងសេចក្តីសង្ខេបការទូទាត់។",
+      periodToday: "ថ្ងៃនេះ",
+      periodAll: "ការលក់ ២០០ ចុងក្រោយ",
+      refresh: "ផ្ទុកឡើងវិញ",
+      receipts: "វិក្កយបត្រ",
+      itemsSold: "មុខទំនិញបានលក់",
+      grossSales: "ការលក់សរុប",
+      colReceipt: "វិក្កយបត្រ",
+      colCustomer: "អតិថិជន",
+      colPayment: "ការទូទាត់",
+      colCashier: "អ្នកគិតលុយ",
+      colTotal: "សរុប",
+      walkIn: "អតិថិជនចូលមកផ្ទាល់",
+      loading: "កំពុងផ្ទុកការលក់…",
+      empty: "មិនទាន់មានការលក់នៅហាងសម្រាប់ចន្លោះពេលនេះទេ។",
+      loadError: "មិនអាចផ្ទុកការលក់បានទេ។",
+      subtotal: "សរុបរង",
+      tax: "ពន្ធ",
+      total: "សរុប",
+    },
+    receipt: {
+      title: "វិក្កយបត្រលក់",
+      receiptNo: "លេខវិក្កយបត្រ",
+      date: "កាលបរិច្ឆេទ",
+      cashier: "អ្នកគិតលុយ",
+      customer: "អតិថិជន",
+      walkIn: "អតិថិជនទូទៅ",
+      payment: "ការទូទាត់",
+      itemsCount: "ចំនួនទំនិញ",
+      subtotal: "សរុបរង",
+      tax: "ពន្ធ ({pct}%)",
+      total: "សរុប",
+      cashReceived: "ប្រាក់ទទួលបាន",
+      change: "ប្រាក់អាប់",
+      thankYou: "សូមអរគុណដែលបានទិញទំនិញជាមួយយើង!",
+      policy: "ទំនិញមិនទាន់បើកអាចប្តូរបានក្នុងរយៈពេល ៧ ថ្ងៃ ដោយបង្ហាញវិក្កយបត្រនេះ។",
+      reprint: "បោះពុម្ពម្តងទៀត",
+      printError: "មិនអាចបោះពុម្ពវិក្កយបត្របានទេ។",
+    },
+    reports: {
+      eyebrow: "ព័ត៌មានអាជីវកម្ម",
+      title: "របាយការណ៍",
+      subtitle: "លទ្ធផលប្រចាំថ្ងៃ ប្រចាំខែ និងប្រចាំឆ្នាំ សម្រាប់ការកុម្ម៉ង់អនឡាញ និងការលក់នៅហាង។",
+      periodDay: "ថ្ងៃ",
+      periodMonth: "ខែ",
+      periodYear: "ឆ្នាំ",
+      previous: "រយៈពេលមុន",
+      next: "រយៈពេលបន្ទាប់",
+      current: "បច្ចុប្បន្ន",
+      refresh: "ផ្ទុកឡើងវិញ",
+      exportCsv: "នាំចេញ CSV",
+      print: "បោះពុម្ព / PDF",
+      loading: "កំពុងរៀបចំរបាយការណ៍…",
+      loadError: "មិនអាចផ្ទុករបាយការណ៍បានទេ។",
+      generated: "បានបង្កើត",
+      reportPeriod: "រយៈពេលរបាយការណ៍",
+      comparedWith: "ប្រៀបធៀបជាមួយ",
+      vsPrevious: "ធៀបនឹងមុន",
+      noComparison: "គ្មានទិន្នន័យមុន",
+      kpiRevenue: "ចំណូលសរុប",
+      kpiTransactions: "ប្រតិបត្តិការ",
+      kpiAvgTicket: "មធ្យមក្នុងមួយវិក្កយបត្រ",
+      kpiItems: "ចំនួនទំនិញបានលក់",
+      kpiNewCustomers: "អតិថិជនថ្មី",
+      insightsTitle: "ចំណុចសំខាន់ៗ",
+      insightUp: "ចំណូលកើនឡើង {pct} ធៀបនឹងរយៈពេលមុន។",
+      insightDown: "ចំណូលថយចុះ {pct} ធៀបនឹងរយៈពេលមុន។",
+      insightFlat: "ចំណូលស្មើនឹងរយៈពេលមុន។",
+      insightNew: "ការលក់ដំបូងដែលបានកត់ត្រា — រយៈពេលមុនគ្មានចំណូលទេ។",
+      insightPeak: "{bucket}ដែលមមាញឹកបំផុតគឺ {label} ដោយមានចំណូល {amount}។",
+      insightTopProduct: "ផលិតផលលក់ដាច់បំផុត៖ {name} ចំនួន {units} ({amount})។",
+      insightChannel: "{channel} បានបង្កើតចំណូល {pct}។",
+      insightCancelled: "ការកុម្ម៉ង់អនឡាញដែលបានបោះបង់ {count} ដែលមានតម្លៃ {amount} មិនត្រូវបានរាប់ក្នុងចំណូលទេ។",
+      trendDay: "ចំណូលតាមម៉ោង",
+      trendMonth: "ចំណូលតាមថ្ងៃ",
+      trendYear: "ចំណូលតាមខែ",
+      online: "អនឡាញ",
+      inStore: "នៅហាង",
+      peak: "ខ្ពស់បំផុត",
+      viewTable: "តារាង",
+      viewChart: "ក្រាហ្វ",
+      channelTitle: "ឆានែលលក់",
+      financialTitle: "សេចក្តីសង្ខេបហិរញ្ញវត្ថុ",
+      grossRevenue: "ចំណូលដុល",
+      netSales: "ការលក់សុទ្ធ (មុនពន្ធ និងដឹកជញ្ជូន)",
+      tax: "ពន្ធដែលបានប្រមូល",
+      shipping: "ថ្លៃដឹកជញ្ជូន",
+      cancelledOrders: "ការកុម្ម៉ង់ដែលបានបោះបង់ (មិនរាប់)",
+      unitsPerTransaction: "ទំនិញក្នុងមួយប្រតិបត្តិការ",
+      paymentsTitle: "វិធីទូទាត់",
+      cashOnDelivery: "បង់ប្រាក់ពេលទទួល",
+      statusTitle: "ស្ថានភាពការកុម្ម៉ង់អនឡាញ",
+      topProductsTitle: "ផលិតផលលក់ដាច់",
+      staffTitle: "លទ្ធផលអ្នកគិតលុយ",
+      colPeriod: "រយៈពេល",
+      colProduct: "ផលិតផល",
+      colUnits: "ចំនួន",
+      colRevenue: "ចំណូល",
+      colShare: "ភាគរយ",
+      colCashier: "អ្នកគិតលុយ",
+      colSales: "វិក្កយបត្រ",
+      colTotal: "សរុប",
+      colTransactions: "ប្រតិបត្តិការ",
+      colChannelSplit: "អនឡាញ / នៅហាង",
+      emptyTitle: "គ្មានការលក់ក្នុងរយៈពេលនេះទេ",
+      emptyDesc: "សូមជ្រើសរើសកាលបរិច្ឆេទផ្សេង ឬពិនិត្យម្តងទៀតនៅពេលមានការកុម្ម៉ង់ និងការលក់នៅហាង។",
+      emptySection: "គ្មានទិន្នន័យសម្រាប់រយៈពេលនេះទេ។",
+      hourSuffix: "ម៉ោង",
+    },
   },
 };
 
