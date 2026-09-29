@@ -6,7 +6,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { formatPrice } from "../../utils/format";
 import type { PosSale, PosPaymentMethod } from "../../types/pos";
 import { PrinterIcon, RefreshIcon } from "../../components/ui/icons";
-import { printReceipt } from "../../utils/receipt";
+import { ReceiptPreview } from "../../components/admin/ReceiptPreview";
 
 export function AdminSales() {
   const { t, language } = useLanguage();
@@ -15,6 +15,7 @@ export function AdminSales() {
   const [sales, setSales] = useState<PosSale[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [previewSale, setPreviewSale] = useState<PosSale | null>(null);
   const [period, setPeriod] = useState<"today" | "all">("today");
   const { showToast } = useToast();
   const loadSales = () => { setLoading(true); void api.get<PosSale[]>("/admin/pos/sales").then(setSales).catch((error) => showToast(error instanceof Error ? error.message : t.admin.sales.loadError, "error")).finally(() => setLoading(false)); };
@@ -46,10 +47,11 @@ export function AdminSales() {
               <span className="min-w-0"><span className="block truncate text-sm font-semibold text-ink">{sale.receiptNumber}</span><span className="text-xs text-ink-soft">{new Date(sale.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span></span>
               <span className="truncate text-sm text-ink">{sale.customerName || t.admin.sales.walkIn}</span><span className="text-sm text-ink-soft">{METHOD_LABEL[sale.paymentMethod]}</span><span className="hidden truncate text-sm text-ink-soft sm:block">{sale.staffName}</span><span className="text-right text-sm font-semibold text-ink">{formatPrice(sale.total)}</span>
             </button>
-            {selectedId === sale.id && <div className="border-t border-line bg-cream/30 px-4 py-4 sm:px-5"><div className="flex flex-col gap-3">{sale.items.map((item) => <div key={`${item.variantId}-${item.productName}`} className="flex items-center gap-3"><ProductArt artKey={item.imagePath || "jar:forest:0"} label={item.productName} className="h-11 w-11 rounded-xl" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium text-ink">{item.productName}</p><p className="text-xs text-ink-soft">{item.variantLabel} · {item.quantity} × {formatPrice(item.unitPrice)}</p></div><span className="text-sm font-semibold text-ink">{formatPrice(item.lineTotal)}</span></div>)}</div><div className="mt-4 flex flex-wrap items-end justify-between gap-4 border-t border-line pt-3"><button type="button" onClick={() => void printReceipt(sale, { t, language }).catch(() => showToast(t.admin.receipt.printError, "error"))} className="flex items-center gap-2 rounded-xl border border-ink/10 bg-white px-3 py-2 text-sm font-medium text-ink hover:bg-cream"><PrinterIcon className="h-4 w-4" /> {t.admin.pos.printReceipt}</button><div className="w-full max-w-xs text-sm sm:w-auto sm:min-w-64"><div className="flex justify-between text-ink-soft"><span>{t.admin.sales.subtotal}</span><span>{formatPrice(sale.subtotal)}</span></div><div className="mt-1 flex justify-between text-ink-soft"><span>{t.admin.sales.tax}</span><span>{formatPrice(sale.tax)}</span></div><div className="mt-2 flex justify-between font-semibold text-ink"><span>{t.admin.sales.total}</span><span>{formatPrice(sale.total)}</span></div></div></div></div>}
+            {selectedId === sale.id && <div className="border-t border-line bg-cream/30 px-4 py-4 sm:px-5"><div className="flex flex-col gap-3">{sale.items.map((item) => <div key={`${item.variantId}-${item.productName}`} className="flex items-center gap-3"><ProductArt artKey={item.imagePath || "jar:forest:0"} label={item.productName} className="h-11 w-11 rounded-xl" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-medium text-ink">{item.productName}</p><p className="text-xs text-ink-soft">{item.variantLabel} · {item.quantity} × {formatPrice(item.unitPrice)}</p></div><span className="text-sm font-semibold text-ink">{formatPrice(item.lineTotal)}</span></div>)}</div><div className="mt-4 flex flex-wrap items-end justify-between gap-4 border-t border-line pt-3"><button type="button" onClick={() => setPreviewSale(sale)} className="flex items-center gap-2 rounded-xl border border-ink/10 bg-white px-3 py-2 text-sm font-medium text-ink hover:bg-cream"><PrinterIcon className="h-4 w-4" /> {t.admin.pos.printReceipt}</button><div className="w-full max-w-xs text-sm sm:w-auto sm:min-w-64"><div className="flex justify-between text-ink-soft"><span>{t.admin.sales.subtotal}</span><span>{formatPrice(sale.subtotal)}</span></div><div className="mt-1 flex justify-between text-ink-soft"><span>{t.admin.sales.tax}</span><span>{formatPrice(sale.tax)}</span></div><div className="mt-2 flex justify-between font-semibold text-ink"><span>{t.admin.sales.total}</span><span>{formatPrice(sale.total)}</span></div></div></div></div>}
           </div>
         ))}
       </div>
+      {previewSale && <ReceiptPreview sale={previewSale} onClose={() => setPreviewSale(null)} />}
     </div>
   );
 }

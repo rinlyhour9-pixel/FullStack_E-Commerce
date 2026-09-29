@@ -622,6 +622,22 @@ export interface Translations {
       policy: string;
       reprint: string;
       printError: string;
+      preview: string;
+      formatReceipt: string;
+      formatInvoice: string;
+      print: string;
+      close: string;
+      invoiceTitle: string;
+      invoiceNo: string;
+      billTo: string;
+      issuedBy: string;
+      colItem: string;
+      colQty: string;
+      colPrice: string;
+      colAmount: string;
+      paid: string;
+      notes: string;
+      amountDue: string;
     };
     reports: {
       eyebrow: string;
@@ -1336,6 +1352,22 @@ export const en: Translations = {
       policy: "Unopened items may be exchanged within 7 days with this receipt.",
       reprint: "Reprint",
       printError: "The receipt could not be printed.",
+      preview: "Receipt preview",
+      formatReceipt: "Receipt · 80mm",
+      formatInvoice: "Invoice · A4",
+      print: "Print",
+      close: "Close",
+      invoiceTitle: "Invoice",
+      invoiceNo: "Invoice no.",
+      billTo: "Bill to",
+      issuedBy: "Served by",
+      colItem: "Item",
+      colQty: "Qty",
+      colPrice: "Unit price",
+      colAmount: "Amount",
+      paid: "Paid",
+      notes: "Notes",
+      amountDue: "Amount paid",
     },
     reports: {
       eyebrow: "Business intelligence",
@@ -2049,6 +2081,22 @@ export const km: Translations = {
       policy: "ទំនិញមិនទាន់បើកអាចប្តូរបានក្នុងរយៈពេល ៧ ថ្ងៃ ដោយបង្ហាញវិក្កយបត្រនេះ។",
       reprint: "បោះពុម្ពម្តងទៀត",
       printError: "មិនអាចបោះពុម្ពវិក្កយបត្របានទេ។",
+      preview: "មើលវិក្កយបត្រមុនបោះពុម្ព",
+      formatReceipt: "វិក្កយបត្រ · 80mm",
+      formatInvoice: "វិក្កយបត្រពេញ · A4",
+      print: "បោះពុម្ព",
+      close: "បិទ",
+      invoiceTitle: "វិក្កយបត្រ",
+      invoiceNo: "លេខវិក្កយបត្រ",
+      billTo: "ចេញជូន",
+      issuedBy: "បម្រើដោយ",
+      colItem: "ទំនិញ",
+      colQty: "ចំនួន",
+      colPrice: "តម្លៃឯកតា",
+      colAmount: "ទឹកប្រាក់",
+      paid: "បានបង់",
+      notes: "កំណត់សម្គាល់",
+      amountDue: "ទឹកប្រាក់បានបង់",
     },
     reports: {
       eyebrow: "ព័ត៌មានអាជីវកម្ម",

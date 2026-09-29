@@ -8,6 +8,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { categoryLabels } from "../../data/products";
 import { formatPrice } from "../../utils/format";
 import { printReceipt } from "../../utils/receipt";
+import { ReceiptPreview } from "../../components/admin/ReceiptPreview";
 import type { PosPaymentMethod, PosSale } from "../../types/pos";
 import { PrinterIcon, SearchIcon, TrashIcon } from "../../components/ui/icons";
 
@@ -35,6 +36,7 @@ export function AdminPos() {
   const [cashReceived, setCashReceived] = useState("");
   const [completedCash, setCompletedCash] = useState<number | undefined>(undefined);
   const [autoPrint, setAutoPrint] = useState(readAutoPrint);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   useEffect(() => { void api.get<{ taxRate: number }>("/admin/pos/config").then((config) => setTaxRate(config.taxRate)).catch(() => undefined); }, []);
 
@@ -183,7 +185,7 @@ export function AdminPos() {
                 <p className="mt-2 font-display text-3xl text-ink">{formatPrice(completedSale.total)}</p>
                 {completedCash !== undefined && completedCash >= completedSale.total && <p className="mt-2 text-sm text-ink">{t.admin.pos.changeDue}: <span className="font-semibold">{formatPrice(completedCash - completedSale.total)}</span></p>}
               </div>
-              <Button type="button" variant="secondary" icon={<PrinterIcon className="h-4 w-4" />} onClick={() => void print(completedSale, completedCash)}>{t.admin.pos.printReceipt}</Button>
+              <Button type="button" variant="secondary" icon={<PrinterIcon className="h-4 w-4" />} onClick={() => setPreviewOpen(true)}>{t.admin.pos.printReceipt}</Button>
               <Button type="button" onClick={() => setCompletedSale(null)}>{t.admin.pos.startNextSale}</Button>
               <p className="text-center text-xs text-ink-soft">{t.admin.pos.receiptNote}</p>
             </div>
@@ -240,6 +242,7 @@ export function AdminPos() {
           )}
         </aside>
       </div>
+      {previewOpen && completedSale && <ReceiptPreview sale={completedSale} cashReceived={completedCash} onClose={() => setPreviewOpen(false)} />}
     </div>
   );
 }
