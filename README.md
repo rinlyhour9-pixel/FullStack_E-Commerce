@@ -70,7 +70,7 @@ npx prisma migrate deploy
 npm run prisma:seed
 ```
 
-The seed is safe to rerun and imports the catalog, image paths, variants, stock, and sample product reviews from the current frontend catalog. New schema changes should use `npx prisma migrate dev --name describe_change` during development, then commit the generated migration.
+The seed is safe to rerun and imports the catalog, image paths, variants, stock, and sample product reviews from the current frontend catalog. Stock is only set when a variant is first created, so rerunning it never resets inventory changed by sales or the admin. New schema changes should use `npx prisma migrate dev --name describe_change` during development, then commit the generated migration.
 
 ## Build and tests
 

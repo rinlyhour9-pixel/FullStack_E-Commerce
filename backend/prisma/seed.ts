@@ -23,7 +23,7 @@ async function main() {
     await prisma.productImage.createMany({ data: item.images.map((path, position) => ({ productId: product.id, path, position })) });
     for (const variant of item.variants) {
       const variantId = `${item.id}-${variant.id}`;
-      await prisma.productVariant.upsert({ where: { id: variantId }, update: { label: variant.label, priceModifier: variant.priceModifier, stock: variant.stock, active: true, productId: product.id }, create: { id: variantId, label: variant.label, priceModifier: variant.priceModifier, stock: variant.stock, productId: product.id } });
+      await prisma.productVariant.upsert({ where: { id: variantId }, update: { label: variant.label, priceModifier: variant.priceModifier, active: true, productId: product.id }, create: { id: variantId, label: variant.label, priceModifier: variant.priceModifier, stock: variant.stock, productId: product.id } });
     }
     for (const review of item.reviews) {
       await prisma.productReview.upsert({ where: { id: review.id }, update: { author: review.author, rating: review.rating, title: review.title, body: review.body, verified: review.verified, date: new Date(`${review.date}T12:00:00Z`), productId: product.id }, create: { id: review.id, author: review.author, rating: review.rating, title: review.title, body: review.body, verified: review.verified, date: new Date(`${review.date}T12:00:00Z`), productId: product.id } });
