@@ -61,13 +61,13 @@ export function Hero() {
 
         <div className="relative mx-auto grid w-full max-w-md grid-cols-2 gap-4 sm:gap-5">
           <div className="translate-y-6 overflow-hidden rounded-[2rem] border border-white/70 shadow-card-hover">
-            <ProductArt artKey="dropper:gold:0" label="Bakuchiol Renewal Serum" className="aspect-3/4" />
+            <ProductArt artKey="/images/products/bakuchiol-renewal-serum.jpg" label="Bakuchiol Renewal Serum" className="aspect-3/4" />
           </div>
           <div className="overflow-hidden rounded-[2rem] border border-white/70 shadow-card-hover">
-            <ProductArt artKey="jar:forest:1" label="Barrier Repair Cream" className="aspect-3/4" />
+            <ProductArt artKey="/images/products/barrier-repair-cream.jpg" label="Barrier Repair Cream" className="aspect-3/4" />
           </div>
           <div className="col-span-2 -mt-6 overflow-hidden rounded-[2rem] border border-white/70 shadow-card-hover">
-            <ProductArt artKey="tube:clay:2" label="Velvet Clay Cleanser" className="aspect-16/9" />
+            <ProductArt artKey="/images/products/coconut-body-butter.jpg" label="Whipped Coconut Body Butter" className="aspect-16/10" />
           </div>
           <div
             className="absolute -right-6 -top-8 h-24 w-24 rounded-full bg-gold/30 blur-2xl sm:h-32 sm:w-32"

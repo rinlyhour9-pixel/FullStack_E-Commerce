@@ -6,12 +6,12 @@ import { Reveal } from "../ui/Reveal";
 import { useLanguage } from "../../context/LanguageContext";
 
 const CATEGORY_ART: Record<ProductCategory, string> = {
-  cleansers: "tube:clay:0",
-  serums: "dropper:gold:1",
-  moisturizers: "jar:forest:0",
-  masks: "jar:sage:2",
-  "sun-care": "spray:gold:0",
-  body: "spray:forest:1",
+  cleansers: "/images/products/velvet-clay-cleanser.jpg",
+  serums: "/images/products/vitamin-c-brightening-serum.jpg",
+  moisturizers: "/images/products/squalane-silk-moisturizer.jpg",
+  masks: "/images/products/calm-oat-sleeping-mask.jpg",
+  "sun-care": "/images/products/daily-defense-spf-50.jpg",
+  body: "/images/products/argan-body-oil.jpg",
 };
 
 const FEATURED_CATEGORIES: ProductCategory[] = [

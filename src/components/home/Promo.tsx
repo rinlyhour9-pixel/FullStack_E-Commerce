@@ -9,7 +9,7 @@ export function Promo() {
 
   const blocks = [
     {
-      art: "jar:forest:2",
+      art: "/images/products/barrier-repair-cream.jpg",
       eyebrow: t.home.promoRitualEyebrow,
       title: t.home.promoRitualTitle,
       body: t.home.promoRitualBody,
@@ -17,7 +17,7 @@ export function Promo() {
       reverse: false,
     },
     {
-      art: "dropper:clay:3",
+      art: "/images/products/whipped-sage-moisturizer.jpg",
       eyebrow: t.home.promoCleanEyebrow,
       title: t.home.promoCleanTitle,
       body: t.home.promoCleanBody,
